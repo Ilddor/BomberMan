@@ -11,14 +11,15 @@ class CGame
 private:
 	EGameStates m_state;
 	sf::RenderWindow* m_windowPtr;
-	std::list<CControl> m_controls;
+	std::list<CControl*> m_controls;
 public:
 	void setWindowPointer(sf::RenderWindow* ptr);
+	void setGameState(EGameStates state);
 
 	void draw();
 	void handleEvent(sf::Event& ev);
 
-	void addControl(CControl control);
+	void addControl(CControl* control);
 
 	CGame(void);
 	~CGame(void);

@@ -1,3 +1,4 @@
+#include <iostream>
 #include <SFML\Graphics.hpp>
 
 #include "Game.h"
@@ -5,11 +6,17 @@
 
 int main()
 {
-	sf::RenderWindow Window(sf::VideoMode(600,400, 32), "Bomber Man, by Ilddor and kamilosxd678");
+	sf::RenderWindow Window(sf::VideoMode(600,600, 32), "Bomber Man, by Ilddor and kamilosxd678");
 
 	CGame game;
+	game.setWindowPointer(&Window);
 
-	game.addControl(CButton(EGameStates::GS_MENU));
+	game.addControl(new CButton(EGameStates::GS_MENU,"create.png", sf::Vector2f(243,50), [&](){
+		game.setGameState(EGameStates::GS_CREATE);
+	}));
+	game.addControl(new CButton(EGameStates::GS_MENU,"join.png", sf::Vector2f(230,100), [&](){
+		game.setGameState(EGameStates::GS_JOIN);
+	}));
 
 	sf::Event Event;
 	while(Window.isOpen())
@@ -26,7 +33,9 @@ int main()
 				break;
 			}
 		}
-		Window.clear();
+		Window.clear(sf::Color::White);
+
+		game.draw();
 
 		Window.display();
 	}
