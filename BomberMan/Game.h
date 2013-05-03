@@ -2,6 +2,7 @@
 
 #include <SFML\Graphics.hpp>
 #include <list>
+#include <Windows.h>
 
 #include "Misc.h"
 #include "Control.h"
@@ -13,6 +14,11 @@ private:
 	sf::RenderWindow* m_windowPtr;
 	sf::Thread* m_serverThread;
 	std::list<CControl*> m_controls;
+
+	WSADATA m_wsas;
+	WORD m_version;
+	sockaddr_in m_socketAddres;
+	SOCKET m_listeningSocket;
 
 	bool m_stopServer;
 public:
