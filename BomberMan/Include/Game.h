@@ -1,7 +1,7 @@
 #pragma once
 
 #include <SFML\Graphics.hpp>
-#include <list>
+#include <map>
 #include <Windows.h>
 
 #include "Misc.h"
@@ -13,7 +13,8 @@ private:
 	EGameStates m_state;
 	sf::RenderWindow* m_windowPtr;
 	sf::Thread* m_serverThread;
-	std::list<CControl*> m_controls;
+	std::map<std::string, CControl*> m_controls;
+	CControl* m_focusedControl;
 
 	WSADATA m_wsas;
 	WORD m_version;
@@ -21,18 +22,26 @@ private:
 	SOCKET m_listeningSocket;
 
 	bool m_stopServer;
+
+	SOCKET m_joinSocket;
+	sockaddr_in m_joinAddres;
 public:
 	void setWindowPointer(sf::RenderWindow* ptr);
 	void setGameState(EGameStates state);
 
+	CControl* getControlById(std::string id);
+
 	void draw();
 	void handleEvent(sf::Event& ev);
 
-	void addControl(CControl* control);
+	void addControl(std::string id, CControl* control);
 
 	void serwer();
 	void startServer();
 	void stopServer();
+	
+	void connectToServer();
+	void disconnect();
 
 	CGame(void);
 	~CGame(void);

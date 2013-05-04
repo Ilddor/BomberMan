@@ -12,6 +12,7 @@ protected:
 	std::function<void()> m_function; 
 public:
 	bool mousePressed(sf::Event::MouseButtonEvent& mouse);
+	void KeyPressed(sf::Event::KeyEvent& keyboard);
 
 	void draw(sf::RenderWindow* window);
 

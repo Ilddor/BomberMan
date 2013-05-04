@@ -13,6 +13,10 @@ bool CButton::mousePressed(sf::Event::MouseButtonEvent& mouse)
 		return false;
 }
 
+void CButton::KeyPressed(sf::Event::KeyEvent& keyboard)
+{
+}
+
 void CButton::draw(sf::RenderWindow* window)
 {
 	window->draw(m_sprite);
