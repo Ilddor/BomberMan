@@ -15,12 +15,14 @@
     <ClInclude Include="Include\Control.h" />
     <ClInclude Include="Include\Game.h" />
     <ClInclude Include="Include\Misc.h" />
+    <ClInclude Include="Include\Player.h" />
     <ClInclude Include="Include\TextField.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Button.cpp" />
     <ClCompile Include="Source\Game.cpp" />
     <ClCompile Include="Source\main.cpp" />
+    <ClCompile Include="Source\Player.cpp" />
     <ClCompile Include="Source\TextField.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

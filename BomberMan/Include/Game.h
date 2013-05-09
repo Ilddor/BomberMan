@@ -2,10 +2,12 @@
 
 #include <SFML\Graphics.hpp>
 #include <map>
+#include <vector>
 #include <Windows.h>
 
 #include "Misc.h"
 #include "Control.h"
+#include "Player.h"
 
 class CGame
 {
@@ -25,6 +27,9 @@ private:
 
 	SOCKET m_joinSocket;
 	sockaddr_in m_joinAddres;
+	bool m_joined;
+
+	std::vector<CPlayer*> m_players;
 public:
 	void setWindowPointer(sf::RenderWindow* ptr);
 	void setGameState(EGameStates state);

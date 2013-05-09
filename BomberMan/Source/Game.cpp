@@ -31,6 +31,15 @@ void CGame::draw()
 		if(it.second->getState() == m_state)
 			it.second->draw(m_windowPtr);
 	}
+	if(m_state == EGameStates::GS_CREATE || m_state == EGameStates::GS_JOINED)
+	{
+		for(auto& it: m_players)
+		{
+			it->m_mutex.lock();
+			m_windowPtr->draw(it->m_text);
+			it->m_mutex.unlock();
+		}
+	}
 }
 
 void CGame::handleEvent(sf::Event& ev)
@@ -66,12 +75,31 @@ void CGame::addControl(std::string id, CControl* control)
 
 void CGame::serwer()
 {
+	sf::Font font;
+
+	font.loadFromFile("Resources/arial.ttf");
+	sf::String name = ((CTextField*)getControlById("name(CREATE)"))->getString();
+	CPlayer* ownPlayer = new CPlayer();
+	ownPlayer->setName(name);
+
+	ownPlayer->m_font = font;
+	ownPlayer->m_text.setPosition(sf::Vector2f(10,10));
+	ownPlayer->m_text.setString(ownPlayer->getName());
+	ownPlayer->m_text.setCharacterSize(20);
+	ownPlayer->m_text.setColor(sf::Color::Red);
+	ownPlayer->m_text.setFont(ownPlayer->m_font);
+	ownPlayer->m_text.setStyle(sf::Text::Regular);
+
+	//player->m_thread = new sf::Thread(&CPlayer::receivePackets, ownPlayer);
+
+	m_players.push_back(ownPlayer);
+
 	m_listeningSocket = socket(AF_INET, SOCK_STREAM, 0); //1h of looking for a bug cos i forgot to add this line-.- I'm stupid
 	
 	bind(m_listeningSocket, (sockaddr FAR*)&m_socketAddres, sizeof(m_socketAddres));
 	listen(m_listeningSocket, 5);
 
-	SOCKET tmp;
+	//SOCKET tmp;
 	struct sockaddr_in satmp;
 	int lenc = sizeof(satmp);
 	fd_set socketTests;
@@ -79,18 +107,43 @@ void CGame::serwer()
 	timeval timeout;
 	timeout.tv_sec = 1;
 	timeout.tv_usec = 0;
-	while(!m_stopServer)
+
+	int players = 1;
+
+	while(!m_stopServer && m_state != EGameStates::GS_GAME)
 	{
 		socketTests.fd_count = 1;
 		socketTests.fd_array[0] = m_listeningSocket;
 
-		if(select(1, &socketTests, nullptr, nullptr, &timeout) > 0)		//used to check if there are connections in queue, we dont want to block thread by accept
+		if(select(1, &socketTests, nullptr, nullptr, &timeout) > 0 && players <= 4)		//used to check if there are connections in queue, we dont want to block thread by accept
 		{
-			tmp = accept(m_listeningSocket, (sockaddr FAR*)&satmp, &lenc);
+			CPlayer* player = new CPlayer();
+			player->m_connectedSocket = accept(m_listeningSocket, (sockaddr FAR*)&satmp, &lenc);
+			char* tmp = new char[80];
+			if(recv(player->m_connectedSocket, tmp, 80, 0) > 0)
+			{
+				player->setName(tmp);
+
+				player->m_font = font;
+				player->m_text.setPosition(sf::Vector2f(10,10+(players*50)));
+				player->m_text.setString(player->getName());
+				player->m_text.setCharacterSize(20);
+				player->m_text.setColor(sf::Color::Red);
+				player->m_text.setFont(player->m_font);
+				player->m_text.setStyle(sf::Text::Regular);
+
+				player->m_thread = new sf::Thread(&CPlayer::receivePackets, player);
+
+				m_players.push_back(player);
+			}
 			//send(tmp, "LOL", 4, 0);
 			//std::cout << "wyslalem" << std::endl;
-			closesocket(tmp);
+			//closesocket(tmp);
 		}
+	}
+	while(!m_stopServer && m_state == EGameStates::GS_GAME)
+	{
+		//when game is in progress
 	}
 	closesocket(m_listeningSocket);
 }
@@ -119,10 +172,12 @@ void CGame::stopServer()
 void CGame::connectToServer()
 {
 	sf::String ip = ((CTextField*)getControlById("ip(JOIN)"))->getString();
+	sf::String name = ((CTextField*)getControlById("name(JOIN)"))->getString();
 
-	std::regex regex ("^([[:digit:]]{1,3}.){3}[[:digit:]]{1,3}$");
+	std::regex regex ("^([[:digit:]]{1,3}\\.){3}[[:digit:]]{1,3}$");
+	std::regex regex2 ("^.+&");
 
-	if(std::regex_match(ip.toAnsiString(), regex))
+	if(std::regex_match(ip.toAnsiString(), regex) && std::regex_match(name.toAnsiString(), regex2))
 	{
 		m_joinAddres.sin_family = AF_INET;
 		m_joinAddres.sin_port = htons(9999);
@@ -136,17 +191,20 @@ void CGame::connectToServer()
 		}
 		else
 		{
+			send(m_joinSocket, name.toAnsiString().c_str(), name.toAnsiString().length(), 0);
 			setGameState(EGameStates::GS_JOINED);
+			m_joined = true;
 		}
 	}
 	else
 	{
-		MessageBox(NULL, L"Podany adres ip jest nieprawid³owy.", L"B³¹d", MB_OK);
+		MessageBox(NULL, L"Podany adres ip jest nieprawid³owy, lub nie wpisano poprawnego niecku", L"B³¹d", MB_OK);
 	}
 }
 
 void CGame::disconnect()
 {
+	send(m_joinSocket, "DISCONNECT", 11, 0);
 	closesocket(m_joinSocket);
 }
 
@@ -157,6 +215,7 @@ CGame::CGame(void)
 	m_state = EGameStates::GS_MENU;
 	m_windowPtr = nullptr;
 	m_stopServer = true;
+	m_joined = false;
 
 	//Socket initialization
 	m_version = MAKEWORD(1,1);

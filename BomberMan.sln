@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BomberMan", "BomberMan\BomberMan.vcxproj", "{DEE742BB-3CD3-4757-B08A-268C50766E12}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SocketTest", "SocketTest\SocketTest.vcxproj", "{06D793B6-9AE4-4390-828A-7310D4A3B587}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BomberManServer", "BomberManServer\BomberManServer.vcxproj", "{D9667E38-9562-4122-9E31-C94D5FE6C73F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,10 +15,10 @@ Global
 		{DEE742BB-3CD3-4757-B08A-268C50766E12}.Debug|Win32.Build.0 = Debug|Win32
 		{DEE742BB-3CD3-4757-B08A-268C50766E12}.Release|Win32.ActiveCfg = Release|Win32
 		{DEE742BB-3CD3-4757-B08A-268C50766E12}.Release|Win32.Build.0 = Release|Win32
-		{06D793B6-9AE4-4390-828A-7310D4A3B587}.Debug|Win32.ActiveCfg = Debug|Win32
-		{06D793B6-9AE4-4390-828A-7310D4A3B587}.Debug|Win32.Build.0 = Debug|Win32
-		{06D793B6-9AE4-4390-828A-7310D4A3B587}.Release|Win32.ActiveCfg = Release|Win32
-		{06D793B6-9AE4-4390-828A-7310D4A3B587}.Release|Win32.Build.0 = Release|Win32
+		{D9667E38-9562-4122-9E31-C94D5FE6C73F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D9667E38-9562-4122-9E31-C94D5FE6C73F}.Debug|Win32.Build.0 = Debug|Win32
+		{D9667E38-9562-4122-9E31-C94D5FE6C73F}.Release|Win32.ActiveCfg = Release|Win32
+		{D9667E38-9562-4122-9E31-C94D5FE6C73F}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
