@@ -4,6 +4,7 @@
 #include "Game.h"
 #include "Button.h"
 #include "TextField.h"
+#include "GameField.h"
 
 int main()
 {
@@ -45,7 +46,7 @@ int main()
 		game.startServer();
 	}));
 	game.addControl("name(JOIN)", new CTextField(EGameStates::GS_JOIN, sf::Vector2f(200,280)));
-
+	game.addControl("gameField(GAME)", new CGameField(EGameStates::GS_CREATE));
 	sf::Event Event;
 	while(Window.isOpen())
 	{
