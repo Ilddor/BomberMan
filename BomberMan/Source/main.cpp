@@ -46,7 +46,10 @@ int main()
 		game.startServer();
 	}));
 	game.addControl("name(JOIN)", new CTextField(EGameStates::GS_JOIN, sf::Vector2f(200,280)));
-	game.addControl("gameField(GAME)", new CGameField(EGameStates::GS_CREATE));
+	game.addControl("gameField(GAME)", new CGameField(EGameStates::GS_GAME));
+	game.addControl("createGame(DEBUG_CREATE)", new CButton(EGameStates::GS_CREATE,"Resources/create.png", sf::Vector2f(243,50), [&](){
+		game.setGameState(EGameStates::GS_GAME);
+	}));
 	sf::Event Event;
 	while(Window.isOpen())
 	{
