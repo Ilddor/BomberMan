@@ -1,6 +1,7 @@
 #pragma once
 #include "Control.h"
 #include "GameObject.h"
+#include "PlayerObject.h"
 #include <list>
 class CGameField :
 	public CControl
@@ -12,6 +13,8 @@ private:
 	sf::RectangleShape m_field;
 	sf::Vector2f m_position;
 	sf::Vector2f m_size;
+	sf::Vector2f m_startPos;
+	CPlayerObject* temporaryHandleForPlayerObject;
 
 	void generateBorder();
 public:
@@ -19,7 +22,7 @@ public:
 	bool mousePressed(sf::Event::MouseButtonEvent& mouse);
 	void KeyPressed(sf::Event::KeyEvent& keyboard);
 	void draw(sf::RenderWindow* window);
-
+	bool isObjectAtPos(const sf::Vector2f& pos);
 	CGameField(EGameStates state);
 	~CGameField(void);
 };

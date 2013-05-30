@@ -1,5 +1,5 @@
 #pragma once
-#include "c:\users\kamilos\documents\github\bomberman\bomberman\include\gameobject.h"
+#include "GameObject.h"
 class CUnbreakableBlock :
 	public CGameObject
 	{
