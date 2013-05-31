@@ -36,7 +36,11 @@ bool CGameField::mousePressed(sf::Event::MouseButtonEvent& mouse)
 		return true;
 	}
 	else */
-		return false;
+	if((mouse.x >= this->m_position.x && mouse.x <= this->m_position.x+(this->m_size.x*16)) && (mouse.y >= this->m_position.y && mouse.y <= this->m_position.y+(this->m_size.y*16))){
+		temporaryHandleForPlayerObject->move(mouse.x, mouse.y);
+		return true;
+	}
+	return false;
 }
 
 void CGameField::KeyPressed(sf::Event::KeyEvent& keyboard)
@@ -55,13 +59,13 @@ void CGameField::draw(sf::RenderWindow* window)
 
 CGameField::CGameField(EGameStates state): CControl(state)
 {
-	m_position.x = 20.0;
-	m_position.y = 20.0;
+	m_position.x = 20;
+	m_position.y = 20;
 	m_size.x = 35;
 	m_size.y = 32;
 	m_startPos.x = 1;
 	m_startPos.y = 1;
-	m_field.setPosition(m_position);
+	m_field.setPosition((sf::Vector2f)m_position);
 	m_field.setSize(sf::Vector2f(16*m_size.x,16*m_size.y));
 	sf::Color fieldColor;
 	fieldColor.r = 16;
@@ -70,7 +74,8 @@ CGameField::CGameField(EGameStates state): CControl(state)
 	fieldColor.a = 255;
 	m_field.setFillColor(fieldColor);
 	generateBorder();
-	temporaryHandleForPlayerObject = new CPlayerObject(1,&m_position, &m_startPos);
+	m_objects.push_back(new CUnbreakableBlock(0,sf::Vector2f(5,3),m_position));
+	temporaryHandleForPlayerObject = new CPlayerObject(1,&m_position, &m_startPos, &m_objects);
 	m_objects.push_back(temporaryHandleForPlayerObject);
 }
 
