@@ -37,7 +37,10 @@ bool CGameField::mousePressed(sf::Event::MouseButtonEvent& mouse)
 	}
 	else */
 	if((mouse.x >= this->m_position.x && mouse.x <= this->m_position.x+(this->m_size.x*16)) && (mouse.y >= this->m_position.y && mouse.y <= this->m_position.y+(this->m_size.y*16))){
-		temporaryHandleForPlayerObject->move(mouse.x, mouse.y);
+		if (mouse.button == sf::Mouse::Left)
+			temporaryHandleForPlayerObject->move(mouse.x, mouse.y);
+		else
+			temporaryHandleForPlayerObject->animate();
 		return true;
 	}
 	return false;

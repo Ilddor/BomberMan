@@ -8,3 +8,12 @@ enum EGameStates
 	GS_JOIN,
 	GS_JOINED
 };
+
+enum EDirections
+{
+	D_NORTH,
+	D_SOUTH,
+	D_EAST,
+	D_WEST,
+	D_DEATH
+};

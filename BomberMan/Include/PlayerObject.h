@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject.h"
+#include "Misc.h"
 #include <list>
 class CPlayerObject :
 	public CGameObject
@@ -7,12 +8,15 @@ class CPlayerObject :
 	private:
 		sf::Vector2f* m_fieldPos;
 		sf::Vector2f* m_startPos;
-		std::list<CGameObject*>* m_objects;
-		bool isObjectAtPos(const sf::Vector2f& pos);
+		sf::Texture m_textures[16];
+		EDirections m_direction;
+		int m_animationState;
+		int m_animationMultiplier;
+		void loadTextures(int id);
 	public:
-		sf::Vector2f calculatePositionOnGameField(int x, int y);
 		void KeyPressed(sf::Event::KeyEvent& keyboard);
 		void move(int x, int y);
+		void animate();
 		void draw(sf::RenderWindow* window);
 		void destroy();
 		CPlayerObject(int id, sf::Vector2f* fieldPos, sf::Vector2f* startPos, std::list<CGameObject*>* objects);
