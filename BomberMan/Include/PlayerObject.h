@@ -16,6 +16,7 @@ class CPlayerObject :
 	public:
 		void KeyPressed(sf::Event::KeyEvent& keyboard);
 		void move(int x, int y);
+		void move(sf::Vector2f moveVector);
 		void animate();
 		void draw(sf::RenderWindow* window);
 		void destroy();

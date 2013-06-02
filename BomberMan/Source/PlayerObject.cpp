@@ -4,7 +4,14 @@
 
 void CPlayerObject::KeyPressed(sf::Event::KeyEvent& keyboard)
 {
-		std::cout << "Ide do gory" << std::endl;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+		move(sf::Vector2f(0.0,-1.0));
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+		move(sf::Vector2f(0.0,1.0));
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+		move(sf::Vector2f(-1.0,0.0));
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+		move(sf::Vector2f(1.0,0.0));		
 }
 
 void CPlayerObject::animate()
@@ -38,6 +45,7 @@ void CPlayerObject::move(int x, int y)
 {
 	sf::Vector2f goalPos = calculatePositionOnGameField(x,y);
 	sf::Vector2f moveVector(0,0);
+	EDirections actualDirection = m_direction;
 	if(goalPos.x < m_position.x)
 		moveVector.x = -1;
 	else if(goalPos.x > m_position.x)
@@ -47,6 +55,7 @@ void CPlayerObject::move(int x, int y)
 	else if(goalPos.y > m_position.y)
 		moveVector.y = 1;
 	if(!isObjectAtPos(m_position + moveVector)){
+		
 		if(moveVector.x < 0)
 			m_direction = EDirections::D_WEST;
 		else if(moveVector.x > 0)
@@ -58,7 +67,28 @@ void CPlayerObject::move(int x, int y)
 		m_position += moveVector;
 		m_sprite.setPosition(sf::Vector2f(m_fieldPos->x + 16*m_position.x, m_fieldPos->y + 16*m_position.y - 8));
 	}
-	m_animationState = 1;	
+	if(actualDirection != m_direction)
+		m_animationState = 1;	
+	animate();	
+}
+void CPlayerObject::move(sf::Vector2f moveVector)
+{
+	EDirections actualDirection = m_direction;
+	if(!isObjectAtPos(m_position + moveVector)){
+		
+		if(moveVector.x < 0)
+			m_direction = EDirections::D_WEST;
+		else if(moveVector.x > 0)
+			m_direction = EDirections::D_EAST;
+		else if(moveVector.y < 0)
+			m_direction = EDirections::D_NORTH;
+		else if(moveVector.y > 0)
+			m_direction = EDirections::D_SOUTH;
+		m_position += moveVector;
+		m_sprite.setPosition(sf::Vector2f(m_fieldPos->x + 16*m_position.x, m_fieldPos->y + 16*m_position.y - 8));
+	}
+	if(actualDirection != m_direction)
+		m_animationState = 1;	
 	animate();	
 }
 
@@ -94,25 +124,8 @@ void CPlayerObject::loadTextures(int id)
 			state++;
 		}
 	}
-	/*
-		m_texture.loadFromFile("Resources/Game/Players/player1_01.png");		
-player1_down_1.png
-player1_down_2.png
-player1_down_3.png
-player1_left_1.png
-player1_left_2.png
-player1_left_3.png
-player1_right_1.png
-player1_right_2.png
-player1_right_3.png
-player1_up_1.png
-player1_up_2.png
-player1_up_3.png
-player1_death_1.png
-player1_death_2.png
-player1_death_3.png
-player1_death_4.png	   */
 }
+
 CPlayerObject::CPlayerObject(int id, sf::Vector2f* fieldPos, sf::Vector2f* startPos, std::list<CGameObject*>* objects)
 {
 	m_direction = EDirections::D_SOUTH;

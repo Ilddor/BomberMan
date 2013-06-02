@@ -64,6 +64,13 @@ void CGame::handleEvent(sf::Event& ev)
 		case sf::Event::KeyPressed :
 			if(m_focusedControl != nullptr)
 				m_focusedControl->KeyPressed(ev.key);
+			for(auto& it: m_controls)
+			{
+				if(it.second->getState() == m_state)
+				{
+					it.second->KeyPressed(ev.key);
+				}
+			}
 			break;
 	}
 }
