@@ -17,7 +17,7 @@ void CTextField::KeyPressed(sf::Event::KeyEvent& keyboard)
 		tmp.erase(tmp.getSize()-1);
 		m_text.setString(tmp);
 	}
-	if(keyboard.code >= sf::Keyboard::A && keyboard.code <= sf::Keyboard::Z)
+	else if(keyboard.code >= sf::Keyboard::A && keyboard.code <= sf::Keyboard::Z)
 	{
 		sf::String tmp = m_text.getString();
 		if(keyboard.shift)
@@ -26,13 +26,13 @@ void CTextField::KeyPressed(sf::Event::KeyEvent& keyboard)
 			tmp.insert(tmp.getSize(), (char)(97+keyboard.code));
 		m_text.setString(tmp);
 	}
-	if(keyboard.code >= sf::Keyboard::Num0 && keyboard.code <= sf::Keyboard::Num9)
+	else if(keyboard.code >= sf::Keyboard::Num0 && keyboard.code <= sf::Keyboard::Num9)
 	{
 		sf::String tmp = m_text.getString();
 		tmp.insert(tmp.getSize(), (char)(22+keyboard.code));
 		m_text.setString(tmp);
 	}
-	if(keyboard.code == sf::Keyboard::Period)
+	else if(keyboard.code == sf::Keyboard::Period)
 	{
 		sf::String tmp = m_text.getString();
 		tmp.insert(tmp.getSize(), '.');

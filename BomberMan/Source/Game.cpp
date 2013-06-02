@@ -64,13 +64,14 @@ void CGame::handleEvent(sf::Event& ev)
 		case sf::Event::KeyPressed :
 			if(m_focusedControl != nullptr)
 				m_focusedControl->KeyPressed(ev.key);
-			for(auto& it: m_controls)
+			/*for(auto& it: m_controls)		//you don't need to put this loop here cuz for gamefield instruction above would send key events when it has focus(imean when you click on it.
+											//This loop caused problems with textfields
 			{
 				if(it.second->getState() == m_state)
 				{
 					it.second->KeyPressed(ev.key);
 				}
-			}
+			}*/
 			break;
 	}
 }

@@ -32,6 +32,9 @@
     <ClCompile Include="Source\TextField.cpp" />
     <ClCompile Include="Source\UnbreakableBlock.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{DEE742BB-3CD3-4757-B08A-268C50766E12}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
