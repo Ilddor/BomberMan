@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\Bomb.h" />
+    <ClInclude Include="Include\BreakableBlock.h" />
     <ClInclude Include="Include\Button.h" />
     <ClInclude Include="Include\Control.h" />
     <ClInclude Include="Include\Explosion.h" />
@@ -26,6 +27,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Bomb.cpp" />
+    <ClCompile Include="Source\BreakableBlock.cpp" />
     <ClCompile Include="Source\Button.cpp" />
     <ClCompile Include="Source\Explosion.cpp" />
     <ClCompile Include="Source\Game.cpp" />

@@ -3,22 +3,19 @@
 
 void CExplosion::animate()
 {
-	if(m_animationState < 3 && !m_maxBlow)
+	if(m_animationState < 2 && !m_maxBlow)
 	{
-		m_animationState++;
-		m_sprite.setTexture(m_textures[m_animationState]);
+		m_sprite.setTexture(m_textures[m_animationState++]);
 		if(m_animationState == 3)
 			m_maxBlow = true;
 	}
 	else if(m_maxBlow && m_animationState > 0)
 	{
-		m_animationState--;
-		m_sprite.setTexture(m_textures[m_animationState]);
-	
+		m_sprite.setTexture(m_textures[m_animationState--]);
 	}
 	else
 	{
-		m_sprite.setColor(sf::Color(0,0,0,0));
+		//m_sprite.setColor(sf::Color(0,0,0,0));
 		m_destroyed = true;	  
 	}
 }
@@ -28,7 +25,7 @@ void CExplosion::draw(sf::RenderWindow* window)
 }
 bool CExplosion::destroy()
 {
-	m_sprite.setColor(sf::Color(0,0,0,0));
+	//m_sprite.setColor(sf::Color(0,0,0,0));
 	m_destroyed = true;
 	return true;
 
@@ -49,7 +46,6 @@ CExplosion::CExplosion(int id, sf::Vector2f* fieldPos, sf::Vector2f position, st
 {
 	m_id = id;
 	m_fieldPos = fieldPos;
-	sf::Texture m_textures[3];
 	m_animationState = 0;
 	m_lastTick = sf::Clock().getElapsedTime();
 	m_lastAnimationTime = 0;
@@ -58,6 +54,7 @@ CExplosion::CExplosion(int id, sf::Vector2f* fieldPos, sf::Vector2f position, st
 	m_position = position;
 	std::string path = "Resources/Game/Explosion/explosion_";
 	std::string place = "mid";
+	std::string tmp;
 	if(id == 1)
 	{
 		m_position.y -= 1;
@@ -91,19 +88,20 @@ CExplosion::CExplosion(int id, sf::Vector2f* fieldPos, sf::Vector2f position, st
 	else if(id == 7)
 	{
 		m_position.x -= 2;
-		place = "east";
+		place = "west";
 	}
 	else if(id == 8)
 	{
 		m_position.x += 2;
-		place = "west";
+		place = "east";
 	}
 	for(int i = 0; i < 3; i++)
 	{
-		m_textures[i].loadFromFile(path + (char)(i+'0') + "_" + place + ".png");
+		tmp = path + (char)(i+'0') + "_" + place + ".png";
+		m_textures[i].loadFromFile(tmp);
 	}
 	m_sprite.setTexture(m_textures[0]);
-	m_sprite.setPosition(sf::Vector2f(fieldPos->x + 16*position.x, fieldPos->y + 16*position.y));
+	m_sprite.setPosition(sf::Vector2f(fieldPos->x + 16*m_position.x, fieldPos->y + 16*m_position.y));
 }
 
 

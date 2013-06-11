@@ -16,7 +16,7 @@ private:
 	sf::Vector2f m_startPos;
 	CPlayerObject* temporaryHandleForPlayerObject;
 
-	void generateBorder();
+	void generateMap();
 public:
 	//Inherited foos
 	bool mousePressed(sf::Event::MouseButtonEvent& mouse);

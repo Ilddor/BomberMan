@@ -10,7 +10,7 @@ void CBomb::animate()
 	}
 	else
 	{
-		m_sprite.setColor(sf::Color(0,0,0,0));
+		m_sprite.setColor(sf::Color(0,0,0,255));
 		m_destroyed = true;	  
 		explode();
 	}
@@ -20,31 +20,31 @@ void CBomb::explode()
 	//CExplosion(int id, sf::Vector2f* fieldPos, sf::Vector2f position, std::list<CGameObject*>* objects)
 	m_objects->push_back(new CExplosion(0, m_fieldPos, m_position, m_objects));
 	//UP
-	if(!isObjectAtPos(sf::Vector2f(m_position.x, m_position.y-1)))
+	if(!destroyObjectAt(sf::Vector2f(m_position.x, m_position.y-1)))
 	{
 		m_objects->push_back(new CExplosion(1, m_fieldPos, m_position, m_objects));
-		if(!isObjectAtPos(sf::Vector2f(m_position.x, m_position.y-2)))
+		if(!destroyObjectAt(sf::Vector2f(m_position.x, m_position.y-2)))
 			m_objects->push_back(new CExplosion(5, m_fieldPos, m_position, m_objects));
 	}
 	//Down
-	if(!isObjectAtPos(sf::Vector2f(m_position.x, m_position.y+1)))
+	if(!destroyObjectAt(sf::Vector2f(m_position.x, m_position.y+1)))
 	{
 		m_objects->push_back(new CExplosion(2, m_fieldPos, m_position, m_objects));
-		if(!isObjectAtPos(sf::Vector2f(m_position.x, m_position.y+2)))
+		if(!destroyObjectAt(sf::Vector2f(m_position.x, m_position.y+2)))
 			m_objects->push_back(new CExplosion(6, m_fieldPos, m_position, m_objects));
 	}
 	//Left
-	if(!isObjectAtPos(sf::Vector2f(m_position.x-1, m_position.y)))
+	if(!destroyObjectAt(sf::Vector2f(m_position.x-1, m_position.y)))
 	{
 		m_objects->push_back(new CExplosion(3, m_fieldPos, m_position, m_objects));
-		if(!isObjectAtPos(sf::Vector2f(m_position.x-2, m_position.y)))
+		if(!destroyObjectAt(sf::Vector2f(m_position.x-2, m_position.y)))
 			m_objects->push_back(new CExplosion(7, m_fieldPos, m_position, m_objects));
 	}
 	//Right
-	if(!isObjectAtPos(sf::Vector2f(m_position.x+1, m_position.y)))
+	if(!destroyObjectAt(sf::Vector2f(m_position.x+1, m_position.y)))
 	{
 		m_objects->push_back(new CExplosion(4, m_fieldPos, m_position, m_objects));
-		if(!isObjectAtPos(sf::Vector2f(m_position.x+2, m_position.y)))
+		if(!destroyObjectAt(sf::Vector2f(m_position.x+2, m_position.y)))
 			m_objects->push_back(new CExplosion(8, m_fieldPos, m_position, m_objects));
 		
 	} 	

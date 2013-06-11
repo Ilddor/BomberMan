@@ -1,5 +1,6 @@
 #include "GameField.h"
 #include "UnbreakableBlock.h"
+#include "BreakableBlock.h"
 #include "PlayerObject.h"
 
 bool CGameField::isObjectAtPos(const sf::Vector2f& pos){
@@ -13,23 +14,39 @@ bool CGameField::isObjectAtPos(const sf::Vector2f& pos){
 
 void CGameField::ticker(const sf::Clock& clock)
 {
+	std::list<std::list<CGameObject*>::iterator> toRemove;
 	for(std::list<CGameObject*>::iterator it = m_objects.begin(); it != m_objects.end(); it++)
 	{
-		(*it)->ticker(clock);
-	}	
+		if((*it)->isDestroyed())
+			toRemove.push_back(it);
+		else
+			(*it)->ticker(clock);
+	}
+	for(std::list<std::list<CGameObject*>::iterator>::iterator it = toRemove.begin(); it != toRemove.end(); it++)
+		m_objects.erase(*it);	
 }
 
-void CGameField::generateBorder()
+void CGameField::generateMap()
 {
-	for(int i = 0; i < m_size.x; i++){
-		m_objects.push_back(new CUnbreakableBlock(0, sf::Vector2f((float)i,(float)0), m_position));
-	}
-	for(int i = 1; i < m_size.y-1; i++){
-		m_objects.push_back(new CUnbreakableBlock(0, sf::Vector2f((float)0,(float)i), m_position));
-		m_objects.push_back(new CUnbreakableBlock(0, sf::Vector2f((float)m_size.x-1,(float)i), m_position));
-	}
-	for(int i = 0; i < m_size.x; i++){
-		m_objects.push_back(new CUnbreakableBlock(0, sf::Vector2f((float)i,(float)m_size.y-1), m_position));
+	sf::Image map;
+	map.loadFromFile("Resources/map.bmp");
+	m_size.x = map.getSize().x;
+	m_size.y = map.getSize().y;
+	sf::Color unbreakable(0,0,0,0);
+	sf::Color breakable(255,0,0,0);
+	sf::Color startPos(0,0,255,0);
+	for(int i = 0; i < map.getSize().x; i++)
+	{
+		for(int j = 0; j < map.getSize().y; j++)
+		{
+			sf::Color tmp = map.getPixel(i,j);
+			if(map.getPixel(i,j) == unbreakable)
+				m_objects.push_back(new CUnbreakableBlock(0,sf::Vector2f(i,j),m_position));
+			else if(map.getPixel(i,j) == breakable)
+				m_objects.push_back(new CBreakableBlock(0,sf::Vector2f(i,j),m_position));
+			else if(map.getPixel(i,j) == startPos)
+				m_startPos = sf::Vector2f(i,j);
+		}
 	}
 }
 
@@ -74,10 +91,7 @@ CGameField::CGameField(EGameStates state): CControl(state)
 {
 	m_position.x = 20;
 	m_position.y = 20;
-	m_size.x = 35;
-	m_size.y = 32;
-	m_startPos.x = 1;
-	m_startPos.y = 1;
+	generateMap();
 	m_field.setPosition((sf::Vector2f)m_position);
 	m_field.setSize(sf::Vector2f(16*m_size.x,16*m_size.y));
 	sf::Color fieldColor;
@@ -86,8 +100,7 @@ CGameField::CGameField(EGameStates state): CControl(state)
 	fieldColor.b = 48;
 	fieldColor.a = 255;
 	m_field.setFillColor(fieldColor);
-	generateBorder();
-	m_objects.push_back(new CUnbreakableBlock(0,sf::Vector2f(5,3),m_position));
+	
 	temporaryHandleForPlayerObject = new CPlayerObject(1,&m_position, &m_startPos, &m_objects);
 	m_objects.push_back(temporaryHandleForPlayerObject);
 }
