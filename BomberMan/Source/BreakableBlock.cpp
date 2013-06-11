@@ -19,7 +19,7 @@ void CBreakableBlock::ticker(const sf::Clock& clock)
 
 CBreakableBlock::CBreakableBlock(int id, const sf::Vector2f& myPos, const sf::Vector2f& fieldPos)
 {
-	std::string texturePath = "Resources/Game/Field/unbreakable";
+	std::string texturePath = "Resources/Game/Field/breakable";
 	texturePath += id + '0';
 	texturePath += ".png";
 	m_texture.loadFromFile(texturePath);
