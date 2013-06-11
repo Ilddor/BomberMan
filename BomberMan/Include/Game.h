@@ -29,6 +29,8 @@ private:
 	sockaddr_in m_joinAddres;
 	bool m_joined;
 
+	sf::Thread* m_listeningThread;
+
 	std::vector<CPlayer*> m_players;
 public:
 	void setWindowPointer(sf::RenderWindow* ptr);
@@ -42,9 +44,10 @@ public:
 
 	void addControl(std::string id, CControl* control);
 
-	void serwer();
-	void startServer();
-	void stopServer();
+	//void serwer();
+	//void startServer();
+	//void stopServer();
+	void listenerThread();
 	
 	void connectToServer();
 	void disconnect();
