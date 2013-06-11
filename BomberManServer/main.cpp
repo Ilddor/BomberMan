@@ -6,6 +6,7 @@
 int main()
 {
 	CServer server;
+	server.waitTillEnd();
 
 	return 0;
 }

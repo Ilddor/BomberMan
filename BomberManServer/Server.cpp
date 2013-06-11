@@ -36,6 +36,8 @@ void CServer::clientThread()
 	char buf[bufSize];
 	char key[4];
 	key[3] = '\0';
+	char buf2[bufSize];
+	char msg[bufSize];
 	
 	while(client->m_connected)
 	{
@@ -56,7 +58,11 @@ void CServer::clientThread()
 			}
 			if(strcmp(key, "MOV") == 0)
 			{
-				//TODO move
+				memcpy(buf2, &buf[3], strlen(buf)-3);
+				sprintf(msg, "MOV%02d%s", client->m_id, buf2);
+				m_mutexBroadcaster.lock();
+				m_broadcastQueue.push(msg);
+				m_mutexBroadcaster.unlock();
 			}
 			if(strcmp(key, "BMB") == 0)
 			{
@@ -70,8 +76,45 @@ void CServer::server()
 {
 	while(m_working)
 	{
-
+		while(m_game)
+		{
+			if(m_broadcastQueue.size() > 0)
+			{
+				std::string msg = m_broadcastQueue.front();
+				m_mutexBroadcaster.lock();
+				m_broadcastQueue.pop();
+				m_mutexBroadcaster.unlock();
+				for(auto it: m_clients)
+				{
+					send(it->m_socket, msg.c_str(), msg.length(), 0);
+				}
+			}
+		}
+		std::cout << "Players connected: " << m_clients.size() << std::endl;
+		bool rdy = true;
+		for(auto it: m_clients)
+		{
+			if(!it->m_ready)
+				break;
+		}
+		if(rdy && m_clients.size() == 4)
+		{
+			m_game = true;
+			int i = 0;
+			for(auto it: m_clients)
+			{
+				it->m_id = i++;
+				send(it->m_socket, "STR", 4, 0);
+			}
+			std::cout << "Game started" << std::endl;
+		}
+		Sleep(1000);
 	}
+}
+
+void CServer::waitTillEnd()
+{
+	m_thread->wait();
 }
 
 CServer::CServer(void)
@@ -92,17 +135,19 @@ CServer::CServer(void)
 
 	m_accepting = true;
 	m_working = true;
+	m_game = false;
 
 	m_acceptingThread = new sf::Thread(&CServer::acceptConnections, this);
 	m_acceptingThread->launch();
 
 	m_thread = new sf::Thread(&CServer::server, this);
 	m_thread->launch();
+	std::cout << "Server started" << std::endl;
 }
-
 
 CServer::~CServer(void)
 {
+	std::cout << "Server stopping" << std::endl;
 	m_accepting = false;
 	m_working = false;
 
