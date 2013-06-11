@@ -22,7 +22,7 @@ class CPlayerObject :
 		void move(sf::Vector2f moveVector);
 		void animate();
 		void draw(sf::RenderWindow* window);
-		void destroy();
+		bool destroy();
 		void ticker(const sf::Clock& clock);
 		CPlayerObject(int id, sf::Vector2f* fieldPos, sf::Vector2f* startPos, std::list<CGameObject*>* objects);
 		~CPlayerObject(void);

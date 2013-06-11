@@ -6,9 +6,9 @@ void CUnbreakableBlock::draw(sf::RenderWindow* window)
 	window->draw(m_sprite);
 }
 
-void CUnbreakableBlock::destroy()
+bool CUnbreakableBlock::destroy()
 {
-
+	return false;
 }
 
 void CUnbreakableBlock::ticker(const sf::Clock& clock)
@@ -24,7 +24,8 @@ CUnbreakableBlock::CUnbreakableBlock(int id, const sf::Vector2f& myPos, const sf
 	m_texture.loadFromFile(texturePath);
 	m_sprite.setTexture(m_texture);
 	m_sprite.setPosition(fieldPos.x + 16*myPos.x, fieldPos.y + 16*myPos.y); 
-	m_position = myPos; 
+	m_position = myPos;
+	m_destroyed = false; 
 }
 
 

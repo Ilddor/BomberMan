@@ -1,4 +1,5 @@
 #include "PlayerObject.h"
+#include "Bomb.h"
 #include <iostream>
 #include <string>
 
@@ -11,14 +12,16 @@ void CPlayerObject::KeyPressed(sf::Event::KeyEvent& keyboard)
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 		move(sf::Vector2f(-1.0,0.0));
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-		move(sf::Vector2f(1.0,0.0));		
+		move(sf::Vector2f(1.0,0.0));
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+		m_objects->push_back(new CBomb(m_fieldPos, m_position, m_objects));		
 }
 
 void CPlayerObject::ticker(const sf::Clock& clock)
 {
 	if(m_goalPosition != m_position)
 	{
-		float movement = (48.f * (float)(clock.getElapsedTime()	- m_lastTick).asSeconds())/16.f;
+		float movement = (96.f * (float)(clock.getElapsedTime()	- m_lastTick).asSeconds())/16.f;
 		if(m_direction == EDirections::D_NORTH)
 		{
 			if(m_position.y - movement <= m_goalPosition.y)
@@ -49,39 +52,34 @@ void CPlayerObject::ticker(const sf::Clock& clock)
 		}
 		m_sprite.setPosition(sf::Vector2f(m_fieldPos->x + 16*m_position.x, m_fieldPos->y + 16*m_position.y - 8));
 		m_lastAnimationTime += (clock.getElapsedTime()	- m_lastTick).asMilliseconds();
-		if(m_lastAnimationTime > 167)
+		if(m_lastAnimationTime > 82)
 		{
 			m_lastAnimationTime = 0;
 			animate();
 		}
 		m_lastTick = clock.getElapsedTime();
-	}	
+	}
+	else
+		m_lastTick = clock.getElapsedTime();	
 }
 
 void CPlayerObject::animate()
 {
-	m_animationState += m_animationMultiplier;
 	if(m_direction != EDirections::D_DEATH){
+		m_animationState += m_animationMultiplier;
 		if(m_animationState == 2)
 			m_animationMultiplier = -1;
 		if(m_animationState == 0)
 			m_animationMultiplier = 1;
 	}
 	else {
-		if(m_animationState == 3)
-			m_animationMultiplier = -1;
-		if(m_animationState == 0)
-			m_animationMultiplier = 1;
+		m_animationState++;
+		if(m_animationState == 3){
+			m_sprite.setColor(sf::Color(0,0,0,0));
+			m_destroyed = true;
+		}
 	}
-	if(m_direction == EDirections::D_SOUTH)
-		m_sprite.setTexture(m_textures[0 + m_animationState]);	
-	else if(m_direction == EDirections::D_WEST)
-		m_sprite.setTexture(m_textures[3 + m_animationState]);
-	else if(m_direction == EDirections::D_EAST)
-		m_sprite.setTexture(m_textures[6 + m_animationState]);
-	else if(m_direction == EDirections::D_NORTH)
-		m_sprite.setTexture(m_textures[9 + m_animationState]);
-	else
+	if(m_direction == EDirections::D_DEATH)
 		m_sprite.setTexture(m_textures[12 + m_animationState]);		
 }
 
@@ -120,15 +118,27 @@ void CPlayerObject::move(int x, int y)
 void CPlayerObject::move(sf::Vector2f moveVector)
 {
 	EDirections actualDirection = m_direction;
-	if(!isObjectAtPos(m_position + moveVector)){
+	if(m_goalPosition == m_position && !isObjectAtPos(m_position + moveVector)){
 		if(moveVector.x < 0)
+		{
 			m_direction = EDirections::D_WEST;
+			m_sprite.setTexture(m_textures[3 + m_animationState]);
+		}
 		else if(moveVector.x > 0)
+		{
 			m_direction = EDirections::D_EAST;
+			m_sprite.setTexture(m_textures[6 + m_animationState]);
+		}
 		else if(moveVector.y < 0)
+		{
 			m_direction = EDirections::D_NORTH;
+			m_sprite.setTexture(m_textures[9 + m_animationState]);
+		}
 		else if(moveVector.y > 0)
+		{
 			m_direction = EDirections::D_SOUTH;
+			m_sprite.setTexture(m_textures[0 + m_animationState]);
+		}
 		m_goalPosition = m_position + moveVector;
 	}
 	if(actualDirection != m_direction)
@@ -140,9 +150,10 @@ void CPlayerObject::draw(sf::RenderWindow* window)
 	window->draw(m_sprite);
 }
 
-void CPlayerObject::destroy()
+bool CPlayerObject::destroy()
 {
-
+	m_direction = EDirections::D_DEATH;
+	return true;
 }
 void CPlayerObject::loadTextures(int id)
 {
@@ -171,6 +182,7 @@ void CPlayerObject::loadTextures(int id)
 
 CPlayerObject::CPlayerObject(int id, sf::Vector2f* fieldPos, sf::Vector2f* startPos, std::list<CGameObject*>* objects)
 {
+	m_destroyed = false;
 	m_direction = EDirections::D_SOUTH;
 	m_objects = objects;
 	m_fieldPos = fieldPos;

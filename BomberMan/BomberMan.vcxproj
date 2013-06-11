@@ -11,8 +11,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\Bomb.h" />
     <ClInclude Include="Include\Button.h" />
     <ClInclude Include="Include\Control.h" />
+    <ClInclude Include="Include\Explosion.h" />
     <ClInclude Include="Include\Game.h" />
     <ClInclude Include="Include\GameField.h" />
     <ClInclude Include="Include\GameObject.h" />
@@ -23,7 +25,9 @@
     <ClInclude Include="Include\UnbreakableBlock.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Bomb.cpp" />
     <ClCompile Include="Source\Button.cpp" />
+    <ClCompile Include="Source\Explosion.cpp" />
     <ClCompile Include="Source\Game.cpp" />
     <ClCompile Include="Source\GameField.cpp" />
     <ClCompile Include="Source\main.cpp" />
