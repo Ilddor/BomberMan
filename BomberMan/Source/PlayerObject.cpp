@@ -14,6 +14,50 @@ void CPlayerObject::KeyPressed(sf::Event::KeyEvent& keyboard)
 		move(sf::Vector2f(1.0,0.0));		
 }
 
+void CPlayerObject::ticker(const sf::Clock& clock)
+{
+	if(m_goalPosition != m_position)
+	{
+		float movement = (32.f * (float)(clock.getElapsedTime()	- m_lastTick).asSeconds())/16.f;
+		if(m_direction == EDirections::D_NORTH)
+		{
+			if(m_position.y - movement <= m_goalPosition.y)
+				m_position = m_goalPosition;
+			else
+				m_position.y -= movement;
+		}
+		else if(m_direction == EDirections::D_SOUTH)
+		{
+			if(m_position.y + movement >= m_goalPosition.y)
+				m_position = m_goalPosition;
+			else
+				m_position.y += movement;
+		}
+		else if(m_direction == EDirections::D_EAST)
+		{
+			if(m_position.x + movement >= m_goalPosition.x)
+				m_position = m_goalPosition;
+			else
+				m_position.x += movement;
+		}
+		else if(m_direction == EDirections::D_WEST)
+		{
+			if(m_position.x - movement <= m_goalPosition.x)
+				m_position = m_goalPosition;
+			else
+				m_position.x -= movement;
+		}
+		m_sprite.setPosition(sf::Vector2f(m_fieldPos->x + 16*m_position.x, m_fieldPos->y + 16*m_position.y - 8));
+		m_lastAnimationTime += (clock.getElapsedTime()	- m_lastTick).asMilliseconds();
+		if(m_lastAnimationTime > 167)
+		{
+			m_lastAnimationTime = 0;
+			animate();
+		}
+		m_lastTick = clock.getElapsedTime();
+	}	
+}
+
 void CPlayerObject::animate()
 {
 	m_animationState += m_animationMultiplier;
@@ -43,6 +87,7 @@ void CPlayerObject::animate()
 
 void CPlayerObject::move(int x, int y)
 {
+	return;
 	sf::Vector2f goalPos = calculatePositionOnGameField(x,y);
 	sf::Vector2f moveVector(0,0);
 	EDirections actualDirection = m_direction;
@@ -64,18 +109,18 @@ void CPlayerObject::move(int x, int y)
 			m_direction = EDirections::D_NORTH;
 		else if(moveVector.y > 0)
 			m_direction = EDirections::D_SOUTH;
-		m_position += moveVector;
-		m_sprite.setPosition(sf::Vector2f(m_fieldPos->x + 16*m_position.x, m_fieldPos->y + 16*m_position.y - 8));
+		//m_position += moveVector;
+		//m_sprite.setPosition(sf::Vector2f(m_fieldPos->x + 16*m_position.x, m_fieldPos->y + 16*m_position.y - 8));
+		m_goalPosition = m_position + moveVector;
 	}
 	if(actualDirection != m_direction)
 		m_animationState = 1;	
-	animate();	
+	//animate();	
 }
 void CPlayerObject::move(sf::Vector2f moveVector)
 {
 	EDirections actualDirection = m_direction;
 	if(!isObjectAtPos(m_position + moveVector)){
-		
 		if(moveVector.x < 0)
 			m_direction = EDirections::D_WEST;
 		else if(moveVector.x > 0)
@@ -84,12 +129,10 @@ void CPlayerObject::move(sf::Vector2f moveVector)
 			m_direction = EDirections::D_NORTH;
 		else if(moveVector.y > 0)
 			m_direction = EDirections::D_SOUTH;
-		m_position += moveVector;
-		m_sprite.setPosition(sf::Vector2f(m_fieldPos->x + 16*m_position.x, m_fieldPos->y + 16*m_position.y - 8));
+		m_goalPosition = m_position + moveVector;
 	}
 	if(actualDirection != m_direction)
 		m_animationState = 1;	
-	animate();	
 }
 
 void CPlayerObject::draw(sf::RenderWindow* window)
@@ -138,6 +181,9 @@ CPlayerObject::CPlayerObject(int id, sf::Vector2f* fieldPos, sf::Vector2f* start
 	m_animationMultiplier = 1;
 	m_sprite.setTexture(m_textures[1]);
 	m_sprite.setPosition(sf::Vector2f(fieldPos->x + 16*startPos->x, fieldPos->y + 16*startPos->y - 8));
+	m_goalPosition = m_position;
+	m_lastTick = sf::Clock().getElapsedTime();
+	m_lastAnimationTime = 0;
 }
 
 

@@ -19,11 +19,9 @@ public:
 		}
 		return false;
 	}
-	sf::Vector2f calculatePositionOnGameField(int x, int y) { 
-		sf::Vector2f tmp((((x - 20) - ((int)(x - 20) % 16))/16),(((y - 20) - ((int)(y - 20) % 16))/16));
-		std::cout << "Clicked on (" << tmp.x << "," << tmp.y << ")\n";
-		return tmp; }
+	sf::Vector2f calculatePositionOnGameField(int x, int y) { return sf::Vector2f((float)(((x - 20) - ((int)(x - 20) % 16))/16),(float)(((y - 20) - ((int)(y - 20) % 16))/16)); }
 	virtual void draw(sf::RenderWindow* window) = 0;
 	virtual void destroy() = 0;
+	virtual void ticker(const sf::Clock& clock) = 0;
 	sf::Vector2f getPos() { return m_position; }
 };

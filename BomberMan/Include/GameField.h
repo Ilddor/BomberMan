@@ -23,6 +23,7 @@ public:
 	void KeyPressed(sf::Event::KeyEvent& keyboard);
 	void draw(sf::RenderWindow* window);
 	bool isObjectAtPos(const sf::Vector2f& pos);
+	void ticker(const sf::Clock& clock);
 	CGameField(EGameStates state);
 	~CGameField(void);
 };

@@ -8,11 +8,14 @@ class CPlayerObject :
 	private:
 		sf::Vector2f* m_fieldPos;
 		sf::Vector2f* m_startPos;
+		sf::Vector2f m_goalPosition;
 		sf::Texture m_textures[16];
 		EDirections m_direction;
 		int m_animationState;
 		int m_animationMultiplier;
+		int m_lastAnimationTime;
 		void loadTextures(int id);
+		sf::Time m_lastTick;
 	public:
 		void KeyPressed(sf::Event::KeyEvent& keyboard);
 		void move(int x, int y);
@@ -20,6 +23,7 @@ class CPlayerObject :
 		void animate();
 		void draw(sf::RenderWindow* window);
 		void destroy();
+		void ticker(const sf::Clock& clock);
 		CPlayerObject(int id, sf::Vector2f* fieldPos, sf::Vector2f* startPos, std::list<CGameObject*>* objects);
 		~CPlayerObject(void);
 	};

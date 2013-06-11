@@ -13,8 +13,8 @@ protected:
 public:
 	bool mousePressed(sf::Event::MouseButtonEvent& mouse);
 	void KeyPressed(sf::Event::KeyEvent& keyboard);
-
 	void draw(sf::RenderWindow* window);
+	void ticker(const sf::Clock& clock);
 
 	sf::String getString();
 

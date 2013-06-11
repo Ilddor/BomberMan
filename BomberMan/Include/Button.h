@@ -13,6 +13,7 @@ protected:
 public:
 	bool mousePressed(sf::Event::MouseButtonEvent& mouse);
 	void KeyPressed(sf::Event::KeyEvent& keyboard);
+	void ticker(const sf::Clock& clock);
 
 	void draw(sf::RenderWindow* window);
 

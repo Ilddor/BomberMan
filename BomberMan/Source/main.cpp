@@ -51,6 +51,7 @@ int main()
 		game.setGameState(EGameStates::GS_GAME);
 	}));
 	sf::Event Event;
+	sf::Clock Clock;
 	while(Window.isOpen())
 	{
 		while(Window.pollEvent(Event))
@@ -66,7 +67,7 @@ int main()
 			}
 		}
 		Window.clear(sf::Color::White);
-
+		game.ticker(Clock);
 		game.draw();
 
 		Window.display();

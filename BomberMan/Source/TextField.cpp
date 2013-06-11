@@ -2,13 +2,15 @@
 
 bool CTextField::mousePressed(sf::Event::MouseButtonEvent& mouse)
 {
-	sf::Vector2f point(mouse.x, mouse.y);
+	sf::Vector2f point((float)mouse.x, (float)mouse.y);
 	if(m_background.getGlobalBounds().contains(point))
 		return true;
 	else
 		return false;
 }
-
+void CTextField::ticker(const sf::Clock& clock)
+{
+}
 void CTextField::KeyPressed(sf::Event::KeyEvent& keyboard)
 {
 	if(keyboard.code == sf::Keyboard::BackSpace && !m_text.getString().isEmpty())

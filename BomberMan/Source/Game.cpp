@@ -42,6 +42,12 @@ void CGame::draw()
 	}
 }
 
+void CGame::ticker(const sf::Clock& clock)
+{
+	for(auto& it: m_controls)
+		it.second->ticker(clock);
+}
+
 void CGame::handleEvent(sf::Event& ev)
 {
 	switch(ev.type)
@@ -71,7 +77,7 @@ void CGame::handleEvent(sf::Event& ev)
 				{
 					it.second->KeyPressed(ev.key);
 				}
-			}*/
+			}  */
 			break;
 	}
 }
@@ -133,7 +139,7 @@ void CGame::serwer()
 				player->setName(tmp);
 
 				player->m_font = font;
-				player->m_text.setPosition(sf::Vector2f(10,10+(players*50)));
+				player->m_text.setPosition(sf::Vector2f((float)10,(float)10+(players*50)));
 				player->m_text.setString(player->getName());
 				player->m_text.setCharacterSize(20);
 				player->m_text.setColor(sf::Color::Red);

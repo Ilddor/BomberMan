@@ -2,7 +2,7 @@
 
 bool CButton::mousePressed(sf::Event::MouseButtonEvent& mouse)
 {
-	sf::Vector2f point(mouse.x, mouse.y);
+	sf::Vector2f point((float)mouse.x, (float)mouse.y);
 	if(m_sprite.getGlobalBounds().contains(point))
 	{
 		if(!m_function._Empty() && mouse.button == sf::Mouse::Left)
@@ -14,6 +14,10 @@ bool CButton::mousePressed(sf::Event::MouseButtonEvent& mouse)
 }
 
 void CButton::KeyPressed(sf::Event::KeyEvent& keyboard)
+{
+}
+
+void CButton::ticker(const sf::Clock& clock)
 {
 }
 

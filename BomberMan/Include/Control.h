@@ -16,6 +16,7 @@ public:
 
 	virtual bool mousePressed(sf::Event::MouseButtonEvent& mouse) = 0;
 	virtual void KeyPressed(sf::Event::KeyEvent& keyboard) = 0;
+	virtual void ticker(const sf::Clock& clock) = 0;
 
 	virtual void draw(sf::RenderWindow* window) = 0;
 

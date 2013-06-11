@@ -11,17 +11,25 @@ bool CGameField::isObjectAtPos(const sf::Vector2f& pos){
 	return false;
 }
 
+void CGameField::ticker(const sf::Clock& clock)
+{
+	for(std::list<CGameObject*>::iterator it = m_objects.begin(); it != m_objects.end(); it++)
+	{
+		(*it)->ticker(clock);
+	}	
+}
+
 void CGameField::generateBorder()
 {
 	for(int i = 0; i < m_size.x; i++){
-		m_objects.push_back(new CUnbreakableBlock(0, sf::Vector2f(i,0), m_position));
+		m_objects.push_back(new CUnbreakableBlock(0, sf::Vector2f((float)i,(float)0), m_position));
 	}
 	for(int i = 1; i < m_size.y-1; i++){
-		m_objects.push_back(new CUnbreakableBlock(0, sf::Vector2f(0,i), m_position));
-		m_objects.push_back(new CUnbreakableBlock(0, sf::Vector2f(m_size.x-1,i), m_position));
+		m_objects.push_back(new CUnbreakableBlock(0, sf::Vector2f((float)0,(float)i), m_position));
+		m_objects.push_back(new CUnbreakableBlock(0, sf::Vector2f((float)m_size.x-1,(float)i), m_position));
 	}
 	for(int i = 0; i < m_size.x; i++){
-		m_objects.push_back(new CUnbreakableBlock(0, sf::Vector2f(i,m_size.y-1), m_position));
+		m_objects.push_back(new CUnbreakableBlock(0, sf::Vector2f((float)i,(float)m_size.y-1), m_position));
 	}
 }
 

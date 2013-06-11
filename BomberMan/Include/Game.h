@@ -37,6 +37,7 @@ public:
 	CControl* getControlById(std::string id);
 
 	void draw();
+	void ticker(const sf::Clock& clock);
 	void handleEvent(sf::Event& ev);
 
 	void addControl(std::string id, CControl* control);

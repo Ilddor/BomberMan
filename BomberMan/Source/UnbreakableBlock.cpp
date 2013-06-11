@@ -11,6 +11,11 @@ void CUnbreakableBlock::destroy()
 
 }
 
+void CUnbreakableBlock::ticker(const sf::Clock& clock)
+{
+
+}
+
 CUnbreakableBlock::CUnbreakableBlock(int id, const sf::Vector2f& myPos, const sf::Vector2f& fieldPos)
 {
 	std::string texturePath = "Resources/Game/Field/unbreakable";
