@@ -12,9 +12,12 @@ protected:
 public:
 	bool isObjectAtPos(const sf::Vector2f& pos)
 	{
+		sf::Vector2i inputPos;
+		inputPos.x = (int)pos.x;
+		inputPos.y = (int)pos.y;
 		for(std::list<CGameObject*>::iterator it = m_objects->begin(); it != m_objects->end(); it++)
 		{
-			if((*it)->getPos().x == pos.x && (*it)->getPos().y == pos.y)
+			if((*it)->getPos().x == inputPos.x && (*it)->getPos().y == inputPos.y)
 				return true;	
 		}
 		return false;

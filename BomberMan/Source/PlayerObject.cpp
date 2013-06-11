@@ -18,7 +18,7 @@ void CPlayerObject::ticker(const sf::Clock& clock)
 {
 	if(m_goalPosition != m_position)
 	{
-		float movement = (32.f * (float)(clock.getElapsedTime()	- m_lastTick).asSeconds())/16.f;
+		float movement = (48.f * (float)(clock.getElapsedTime()	- m_lastTick).asSeconds())/16.f;
 		if(m_direction == EDirections::D_NORTH)
 		{
 			if(m_position.y - movement <= m_goalPosition.y)
