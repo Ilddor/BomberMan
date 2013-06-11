@@ -27,10 +27,12 @@ private:
 	bool m_accepting;
 	sf::Thread* m_thread;
 	bool m_working;
+	bool m_game;
 public:
 	void acceptConnections();
 	void clientThread();
 	void server();
+	void waitTillEnd();
 
 	CServer(void);
 	~CServer(void);
