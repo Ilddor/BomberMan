@@ -3,7 +3,7 @@
 
 void CBomb::animate()
 {
-	if(m_animationState < 3)
+	if(m_animationState < 2)
 	{
 		m_animationState++;
 		m_sprite.setTexture(m_textures[m_animationState]);
