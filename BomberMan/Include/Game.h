@@ -44,9 +44,9 @@ public:
 
 	void addControl(std::string id, CControl* control);
 
-	//void serwer();
-	//void startServer();
-	//void stopServer();
+	void serwer();
+	void startServer();
+	void stopServer();
 	void listenerThread();
 	
 	void connectToServer();

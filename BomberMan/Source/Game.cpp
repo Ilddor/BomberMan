@@ -87,7 +87,7 @@ void CGame::addControl(std::string id, CControl* control)
 	m_controls.insert(std::make_pair(id, control));
 }
 
-/*void CGame::serwer()
+void CGame::serwer()
 {
 	sf::Font font;
 
@@ -181,7 +181,7 @@ void CGame::stopServer()
 		delete m_serverThread;
 		m_serverThread = nullptr;
 	}
-}*/
+}
 
 void CGame::listenerThread()
 {
@@ -217,7 +217,7 @@ void CGame::connectToServer()
 		}
 		else
 		{
-			m_listeningThread = new sf::Thread(CGame::listenerThread, this);
+			m_listeningThread = new sf::Thread(&CGame::listenerThread, this);
 			m_listeningThread->launch();
 			send(m_joinSocket, name.toAnsiString().c_str(), name.toAnsiString().length(), 0);	//TODO!
 			setGameState(EGameStates::GS_JOINED);
