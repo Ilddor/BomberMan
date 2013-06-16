@@ -203,7 +203,7 @@ void CGame::connectToServer()
 	std::regex regex ("^([[:digit:]]{1,3}\\.){3}[[:digit:]]{1,3}$");
 	std::regex regex2 ("^.+&");
 
-	if(std::regex_match(ip.toAnsiString(), regex) && std::regex_match(name.toAnsiString(), regex2))
+	//if(std::regex_match(ip.toAnsiString(), regex) && std::regex_match(name.toAnsiString(), regex2))
 	{
 		m_joinAddres.sin_family = AF_INET;
 		m_joinAddres.sin_port = htons(9999);
@@ -219,14 +219,15 @@ void CGame::connectToServer()
 		{
 			m_listeningThread = new sf::Thread(&CGame::listenerThread, this);
 			m_listeningThread->launch();
-			send(m_joinSocket, name.toAnsiString().c_str(), name.toAnsiString().length(), 0);	//TODO!
+			std::string tmp = "NME"+name.toAnsiString();
+			send(m_joinSocket, tmp.c_str(), tmp.length()+1, 0);	//TODO!
 			setGameState(EGameStates::GS_JOINED);
 			m_joined = true;
 		}
 	}
-	else
+	//else
 	{
-		MessageBox(NULL, L"Podany adres ip jest nieprawid³owy, lub nie wpisano poprawnego niecku", L"B³¹d", MB_OK);
+		MessageBox(NULL, L"Podany adres ip jest nieprawid³owy, lub nie wpisano poprawnego nicku", L"B³¹d", MB_OK);
 	}
 }
 

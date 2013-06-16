@@ -16,13 +16,15 @@ void CServer::acceptConnections()
 
 	while(m_accepting && m_clients.size() < 4)
 	{
-		if(select(1, &socketTests, nullptr, nullptr, &timeout) > 0)
+		//std::cout << "check" << std::endl;
+		//if(select(1, &socketTests, nullptr, nullptr, &timeout) > 0)
 		{
 			lenc = sizeof(socketClientAddr);
 			tmp = new CClient();
 			tmp->m_socket = accept(m_listeningSocket, (sockaddr FAR*)&socketClientAddr, &lenc);
 			m_clients.push_back(tmp);
 			m_Listeners.push_back(new sf::Thread(&CServer::clientThread, this));
+			m_Listeners.back()->launch();
 			Sleep(100);
 		}
 	}
@@ -43,6 +45,7 @@ void CServer::clientThread()
 	{
 		if(recv(client->m_socket, buf, bufSize, 0) > 0)
 		{
+			std::cout << "Income: " << buf << std::endl;
 			memcpy(key, buf, 3);
 			if(strcmp(key, "NME") == 0)
 			{
@@ -66,7 +69,19 @@ void CServer::clientThread()
 			}
 			if(strcmp(key, "BMB") == 0)
 			{
-				//TODO bomb
+				memcpy(buf2, &buf[3], strlen(buf)-3);
+				sprintf(msg, "BMB%s", buf2);
+				m_mutexBroadcaster.lock();
+				m_broadcastQueue.push(msg);
+				m_mutexBroadcaster.unlock();
+			}
+			if(strcmp(key, "DTH") == 0)
+			{
+				memcpy(buf2, &buf[3], strlen(buf)-3);
+				sprintf(msg, "DTH%02d", client->m_id);
+				m_mutexBroadcaster.lock();
+				m_broadcastQueue.push(msg);
+				m_mutexBroadcaster.unlock();
 			}
 		}
 	}
@@ -91,6 +106,15 @@ void CServer::server()
 			}
 		}
 		std::cout << "Players connected: " << m_clients.size() << std::endl;
+		std::string connectedMSG = "PPL"+m_clients.size();
+		for(auto it: m_clients)
+		{
+			send(it->m_socket, connectedMSG.c_str(), connectedMSG.length()+1, 0);
+		}
+		for(auto it: m_clients)
+		{
+			std::cout << "Player: " << it->m_name << std::endl;
+		}
 		bool rdy = true;
 		for(auto it: m_clients)
 		{
@@ -100,6 +124,7 @@ void CServer::server()
 		if(rdy && m_clients.size() == 4)
 		{
 			m_game = true;
+			Sleep(1000);
 			int i = 0;
 			for(auto it: m_clients)
 			{
@@ -153,4 +178,5 @@ CServer::~CServer(void)
 
 	m_acceptingThread->wait();
 	m_thread->wait();
+	closesocket(m_listeningSocket);
 }
