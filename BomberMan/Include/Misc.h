@@ -17,3 +17,10 @@ enum EDirections
 	D_WEST,
 	D_DEATH
 };
+
+enum EDestroyResult
+{
+	DR_NONE,
+	DR_FAIL,
+	DR_SUCCESS	
+};

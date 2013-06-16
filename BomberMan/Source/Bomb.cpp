@@ -20,32 +20,40 @@ void CBomb::explode()
 	//CExplosion(int id, sf::Vector2f* fieldPos, sf::Vector2f position, std::list<CGameObject*>* objects)
 	m_objects->push_back(new CExplosion(0, m_fieldPos, m_position, m_objects));
 	//UP
-	if(!destroyObjectAt(sf::Vector2f(m_position.x, m_position.y-1)))
+	EDestroyResult boomEffect = destroyObjectAt(sf::Vector2f(m_position.x, m_position.y-1));
+	if(boomEffect != EDestroyResult::DR_FAIL)
 	{
 		m_objects->push_back(new CExplosion(1, m_fieldPos, m_position, m_objects));
-		if(!destroyObjectAt(sf::Vector2f(m_position.x, m_position.y-2)))
-			m_objects->push_back(new CExplosion(5, m_fieldPos, m_position, m_objects));
+		if(boomEffect == EDestroyResult::DR_NONE)
+			if(destroyObjectAt(sf::Vector2f(m_position.x, m_position.y-2)) != EDestroyResult::DR_FAIL)
+				m_objects->push_back(new CExplosion(5, m_fieldPos, m_position, m_objects));
 	}
 	//Down
-	if(!destroyObjectAt(sf::Vector2f(m_position.x, m_position.y+1)))
+	boomEffect = destroyObjectAt(sf::Vector2f(m_position.x, m_position.y+1));
+	if(boomEffect != EDestroyResult::DR_FAIL)
 	{
 		m_objects->push_back(new CExplosion(2, m_fieldPos, m_position, m_objects));
-		if(!destroyObjectAt(sf::Vector2f(m_position.x, m_position.y+2)))
-			m_objects->push_back(new CExplosion(6, m_fieldPos, m_position, m_objects));
+		if(boomEffect == EDestroyResult::DR_NONE)
+			if(destroyObjectAt(sf::Vector2f(m_position.x, m_position.y+2)) != EDestroyResult::DR_FAIL)
+				m_objects->push_back(new CExplosion(6, m_fieldPos, m_position, m_objects));
 	}
 	//Left
-	if(!destroyObjectAt(sf::Vector2f(m_position.x-1, m_position.y)))
+	boomEffect = destroyObjectAt(sf::Vector2f(m_position.x-1, m_position.y));
+	if(boomEffect != EDestroyResult::DR_FAIL)
 	{
 		m_objects->push_back(new CExplosion(3, m_fieldPos, m_position, m_objects));
-		if(!destroyObjectAt(sf::Vector2f(m_position.x-2, m_position.y)))
-			m_objects->push_back(new CExplosion(7, m_fieldPos, m_position, m_objects));
+		if(boomEffect == EDestroyResult::DR_NONE)
+			if(destroyObjectAt(sf::Vector2f(m_position.x-2, m_position.y)) != EDestroyResult::DR_FAIL)
+				m_objects->push_back(new CExplosion(7, m_fieldPos, m_position, m_objects));
 	}
 	//Right
-	if(!destroyObjectAt(sf::Vector2f(m_position.x+1, m_position.y)))
+	boomEffect = destroyObjectAt(sf::Vector2f(m_position.x+1, m_position.y));
+	if(boomEffect != EDestroyResult::DR_FAIL)
 	{
 		m_objects->push_back(new CExplosion(4, m_fieldPos, m_position, m_objects));
-		if(!destroyObjectAt(sf::Vector2f(m_position.x+2, m_position.y)))
-			m_objects->push_back(new CExplosion(8, m_fieldPos, m_position, m_objects));
+		if(boomEffect == EDestroyResult::DR_NONE)
+			if(destroyObjectAt(sf::Vector2f(m_position.x+2, m_position.y)) != EDestroyResult::DR_FAIL)
+				m_objects->push_back(new CExplosion(8, m_fieldPos, m_position, m_objects));
 		
 	} 	
 }
