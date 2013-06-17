@@ -201,6 +201,11 @@ void CPlayerObject::loadTextures(int id)
 	}
 }
 
+void CPlayerObject::setPos(sf::Vector2f pos)
+{
+	m_position = pos;
+}
+
 CPlayerObject::CPlayerObject(int id, sf::Vector2f* fieldPos, sf::Vector2f* startPos, std::list<CGameObject*>* objects)
 {
 	m_isLethal = false;

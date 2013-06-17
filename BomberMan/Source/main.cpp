@@ -62,6 +62,7 @@ int main()
 			switch(Event.type)
 			{
 			case sf::Event::Closed :
+				game.disconnect();
 				Window.close();
 				break;
 			default :

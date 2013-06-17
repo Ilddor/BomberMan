@@ -73,6 +73,8 @@ void CGame::handleEvent(sf::Event& ev)
 			if(m_state == EGameStates::GS_GAME)
 			{
 				char msg[10] = {'\0'};
+				char msg2[10] = {'\0'};
+				sprintf(msg2, "POS%02d%02d", (int)m_gameField->getPlayerPos().x,  (int)m_gameField->getPlayerPos().y);
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 					//playerMove(0, -1, m_myPlayer);
 					sprintf(msg, "MOV%02d%02d", 0, -1);
@@ -85,6 +87,9 @@ void CGame::handleEvent(sf::Event& ev)
 				else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 					//playerMove(1, 0, m_myPlayer);
 					sprintf(msg, "MOV%02d%02d", 1, 0);
+				else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+					sprintf(msg, "BMB%02d%02d", (int)m_gameField->getPlayerPos().x, (int)m_gameField->getPlayerPos().y);
+				send(m_joinSocket, msg2, 10, 0);
 				send(m_joinSocket, msg, 10, 0);
 			}
 			/*for(auto& it: m_controls)		//you don't need to put this loop here cuz for gamefield instruction above would send key events when it has focus(imean when you click on it.
@@ -156,8 +161,8 @@ void CGame::stopServer()
 
 void CGame::listenerThread()
 {
-	char buf[80];
-	char buf2[80];
+	char buf[80]  = {'\0'};
+	char buf2[80] = {'\0'};
 	char key[4];
 	key[3] = '\0';
 
@@ -166,6 +171,9 @@ void CGame::listenerThread()
 		if(recv(m_joinSocket, buf, 80, 0) > 0)
 		{
 			std::cout << buf << std::endl;
+			//m_queueMutex.lock();
+			//m_listQueue.push(buf);
+			//m_queueMutex.unlock();
 			memcpy(key, buf, 3);
 			if(strcmp(key, "STR") == 0)
 			{
@@ -204,8 +212,33 @@ void CGame::listenerThread()
 				y = atoi(buf2);
 				m_gameField->playerMove(x, y, id);
 			}
+			if(strcmp(key, "POS") == 0)
+			{
+				int id, x, y;
+				memcpy(buf2, &buf[3], 2);
+				buf2[2] = '\0';
+				id = atoi(buf2);
+				memcpy(buf2, &buf[5], 2);
+				buf2[2] = '\0';
+				x = atoi(buf2);
+				memcpy(buf2, &buf[7], 2);
+				buf2[2] = '\0';
+				y = atoi(buf2);
+				m_gameField->setPlayerPos(x, y, id);
+			}
+			if(strcmp(key, "BMB") == 0)
+			{
+				int x, y;
+				memcpy(buf2, &buf[3], 2);
+				buf2[2] = '\0';
+				x = atoi(buf2);
+				memcpy(buf2, &buf[5], 2);
+				buf2[2] = '\0';
+				y = atoi(buf2);
+				m_gameField->bomb(x, y);
+			}
 		}
-		std::cout << "lol" << std::endl;
+		//std::cout << "lol" << std::endl;
 	}
 }
 

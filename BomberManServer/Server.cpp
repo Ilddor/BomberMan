@@ -35,11 +35,11 @@ void CServer::clientThread()
 	CClient* client = m_clients.back();
 
 	const int bufSize = 80;
-	char buf[bufSize];
+	char buf[bufSize] = {'\0'};
 	char key[4];
 	key[3] = '\0';
-	char buf2[bufSize];
-	char msg[bufSize];
+	char buf2[bufSize] = {'\0'};
+	char msg[bufSize] = {'\0'};
 	
 	while(client->m_connected)
 	{
@@ -68,6 +68,14 @@ void CServer::clientThread()
 			{
 				memcpy(buf2, &buf[3], strlen(buf)-3);
 				sprintf(msg, "MOV%02d%s", client->m_id, buf2);
+				m_mutexBroadcaster.lock();
+				m_broadcastQueue.push(msg);
+				m_mutexBroadcaster.unlock();
+			}
+			if(strcmp(key, "POS") == 0)
+			{
+				memcpy(buf2, &buf[3], strlen(buf)-3);
+				sprintf(msg, "POS%02d%s", client->m_id, buf2);
 				m_mutexBroadcaster.lock();
 				m_broadcastQueue.push(msg);
 				m_mutexBroadcaster.unlock();
@@ -106,16 +114,16 @@ void CServer::server()
 				m_mutexBroadcaster.unlock();
 				for(auto it: m_clients)
 				{
-					send(it->m_socket, msg.c_str(), msg.length(), 0);
+					send(it->m_socket, msg.c_str(), msg.length()+1, 0);
 				}
 			}
 		}
 		std::cout << "Players connected: " << m_clients.size() << std::endl;
 		std::string connectedMSG = "PPL"+m_clients.size();
-		for(auto it: m_clients)
+		/*for(auto it: m_clients)
 		{
 			send(it->m_socket, connectedMSG.c_str(), connectedMSG.length()+1, 0);
-		}
+		}*/
 		for(auto it: m_clients)
 		{
 			std::cout << "Player: " << it->m_name << std::endl;
@@ -148,9 +156,10 @@ void CServer::server()
 				send(it->m_socket, msg, 6, 0);
 			}
 			std::cout << "Game started" << std::endl;
+			Sleep(100);
 			for(auto it: m_clients)
 			{
-				send(it->m_socket, plr, 80, 0);
+				send(it->m_socket, plr, strlen(plr), 0);
 			}
 		}
 		Sleep(1000);

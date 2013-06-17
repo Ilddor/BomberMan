@@ -3,6 +3,7 @@
 #include <SFML\Graphics.hpp>
 #include <map>
 #include <vector>
+#include <queue>
 #include <Windows.h>
 
 #include "Misc.h"
@@ -31,6 +32,8 @@ private:
 	bool m_joined;
 
 	sf::Thread* m_listeningThread;
+	std::queue<std::string> m_listQueue;
+	sf::Mutex m_queueMutex;
 
 	std::vector<CPlayer*> m_players;
 	CGameField* m_gameField;
