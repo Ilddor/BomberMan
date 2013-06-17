@@ -59,6 +59,16 @@ void CPlayerObject::ticker(const sf::Clock& clock)
 		}
 		m_lastTick = clock.getElapsedTime();
 	}
+	else if(m_direction == EDirections::D_DEATH)
+	{
+		m_lastAnimationTime += (clock.getElapsedTime()	- m_lastTick).asMilliseconds();
+		if(m_lastAnimationTime > 750)
+		{
+			m_lastAnimationTime = 0;
+			animate();
+		}
+		m_lastTick = clock.getElapsedTime();
+	}
 	else
 		m_lastTick = clock.getElapsedTime();	
 }
@@ -118,28 +128,36 @@ void CPlayerObject::move(int x, int y)
 void CPlayerObject::move(sf::Vector2f moveVector)
 {
 	EDirections actualDirection = m_direction;
-	if(m_goalPosition == m_position && !isObjectAtPos(m_position + moveVector)){
-		if(moveVector.x < 0)
+	if(m_goalPosition == m_position){
+		if(!isObjectAtPos(m_position + moveVector))
 		{
-			m_direction = EDirections::D_WEST;
-			m_sprite.setTexture(m_textures[3 + m_animationState]);
+			if(moveVector.x < 0)
+			{
+				m_direction = EDirections::D_WEST;
+				m_sprite.setTexture(m_textures[3 + m_animationState]);
+			}
+			else if(moveVector.x > 0)
+			{
+				m_direction = EDirections::D_EAST;
+				m_sprite.setTexture(m_textures[6 + m_animationState]);
+			}
+			else if(moveVector.y < 0)
+			{
+				m_direction = EDirections::D_NORTH;
+				m_sprite.setTexture(m_textures[9 + m_animationState]);
+			}
+			else if(moveVector.y > 0)
+			{
+				m_direction = EDirections::D_SOUTH;
+				m_sprite.setTexture(m_textures[0 + m_animationState]);
+			}
+			m_goalPosition = m_position + moveVector;
 		}
-		else if(moveVector.x > 0)
+		else if(isObjectLethal(m_position + moveVector))
 		{
-			m_direction = EDirections::D_EAST;
-			m_sprite.setTexture(m_textures[6 + m_animationState]);
+			m_position += moveVector;
+			destroy();
 		}
-		else if(moveVector.y < 0)
-		{
-			m_direction = EDirections::D_NORTH;
-			m_sprite.setTexture(m_textures[9 + m_animationState]);
-		}
-		else if(moveVector.y > 0)
-		{
-			m_direction = EDirections::D_SOUTH;
-			m_sprite.setTexture(m_textures[0 + m_animationState]);
-		}
-		m_goalPosition = m_position + moveVector;
 	}
 	if(actualDirection != m_direction)
 		m_animationState = 1;	
@@ -152,7 +170,10 @@ void CPlayerObject::draw(sf::RenderWindow* window)
 
 bool CPlayerObject::destroy()
 {
+	m_sprite.setPosition(sf::Vector2f(m_fieldPos->x + 16*m_position.x, m_fieldPos->y + 16*m_position.y - 8));
 	m_direction = EDirections::D_DEATH;
+	m_animationState = 0;
+	m_animationMultiplier = 1;
 	return true;
 }
 void CPlayerObject::loadTextures(int id)
@@ -182,6 +203,7 @@ void CPlayerObject::loadTextures(int id)
 
 CPlayerObject::CPlayerObject(int id, sf::Vector2f* fieldPos, sf::Vector2f* startPos, std::list<CGameObject*>* objects)
 {
+	m_isLethal = true;
 	m_destroyed = false;
 	m_direction = EDirections::D_SOUTH;
 	m_objects = objects;

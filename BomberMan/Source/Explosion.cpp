@@ -51,6 +51,7 @@ CExplosion::CExplosion(int id, sf::Vector2f* fieldPos, sf::Vector2f position, st
 	m_lastAnimationTime = 0;
 	m_destroyed = false;
 	m_maxBlow = false;
+	m_isLethal = true;
 	m_position = position;
 	std::string path = "Resources/Game/Explosion/explosion_";
 	std::string place = "mid";

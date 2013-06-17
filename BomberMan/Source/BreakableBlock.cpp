@@ -26,7 +26,8 @@ CBreakableBlock::CBreakableBlock(int id, const sf::Vector2f& myPos, const sf::Ve
 	m_sprite.setTexture(m_texture);
 	m_sprite.setPosition(fieldPos.x + 16*myPos.x, fieldPos.y + 16*myPos.y); 
 	m_position = myPos;
-	m_destroyed = false; 
+	m_destroyed = false;
+	m_isLethal = false; 
 }
 
 

@@ -90,6 +90,7 @@ CBomb::CBomb(sf::Vector2f* fieldPos, sf::Vector2f position, std::list<CGameObjec
 	m_animationState = 0;
 	m_lastTick = sf::Clock().getElapsedTime();
 	m_lastAnimationTime = 0;
+	m_isLethal = false;
 }
 
 

@@ -18,6 +18,7 @@ void CUnbreakableBlock::ticker(const sf::Clock& clock)
 
 CUnbreakableBlock::CUnbreakableBlock(int id, const sf::Vector2f& myPos, const sf::Vector2f& fieldPos)
 {
+	m_isLethal = false;
 	std::string texturePath = "Resources/Game/Field/unbreakable";
 	texturePath += id + '0';
 	texturePath += ".png";
