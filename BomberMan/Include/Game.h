@@ -8,6 +8,7 @@
 #include "Misc.h"
 #include "Control.h"
 #include "Player.h"
+#include "GameField.h"
 
 class CGame
 {
@@ -32,6 +33,7 @@ private:
 	sf::Thread* m_listeningThread;
 
 	std::vector<CPlayer*> m_players;
+	CGameField* m_gameField;
 public:
 	void setWindowPointer(sf::RenderWindow* ptr);
 	void setGameState(EGameStates state);
@@ -51,6 +53,7 @@ public:
 	
 	void connectToServer();
 	void disconnect();
+	void rdy();
 
 	CGame(void);
 	~CGame(void);

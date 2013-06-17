@@ -70,6 +70,23 @@ void CGame::handleEvent(sf::Event& ev)
 		case sf::Event::KeyPressed :
 			if(m_focusedControl != nullptr)
 				m_focusedControl->KeyPressed(ev.key);
+			if(m_state == EGameStates::GS_GAME)
+			{
+				char msg[10] = {'\0'};
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+					//playerMove(0, -1, m_myPlayer);
+					sprintf(msg, "MOV%02d%02d", 0, -1);
+				else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+					//playerMove(0, 1, m_myPlayer);
+					sprintf(msg, "MOV%02d%02d", 0, 1);
+				else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+					//playerMove(-1, 0, m_myPlayer);
+					sprintf(msg, "MOV%02d%02d", -1, 0);
+				else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+					//playerMove(1, 0, m_myPlayer);
+					sprintf(msg, "MOV%02d%02d", 1, 0);
+				send(m_joinSocket, msg, 10, 0);
+			}
 			/*for(auto& it: m_controls)		//you don't need to put this loop here cuz for gamefield instruction above would send key events when it has focus(imean when you click on it.
 											//This loop caused problems with textfields
 			{
@@ -85,11 +102,13 @@ void CGame::handleEvent(sf::Event& ev)
 void CGame::addControl(std::string id, CControl* control)
 {
 	m_controls.insert(std::make_pair(id, control));
+	if(id == "gameField(GAME)")
+		m_gameField = static_cast<CGameField*>(control);
 }
 
 void CGame::serwer()
 {
-	sf::Font font;
+	/*sf::Font font;
 
 	font.loadFromFile("Resources/arial.ttf");
 	sf::String name = ((CTextField*)getControlById("name(CREATE)"))->getString();
@@ -106,60 +125,12 @@ void CGame::serwer()
 
 	//player->m_thread = new sf::Thread(&CPlayer::receivePackets, ownPlayer);
 
-	m_players.push_back(ownPlayer);
+	m_players.push_back(ownPlayer);*/
 
-	m_listeningSocket = socket(AF_INET, SOCK_STREAM, 0); //1h of looking for a bug cos i forgot to add this line-.- I'm stupid
+	//m_listeningSocket = socket(AF_INET, SOCK_STREAM, 0); //1h of looking for a bug cos i forgot to add this line-.- I'm stupid
 	
-	bind(m_listeningSocket, (sockaddr FAR*)&m_socketAddres, sizeof(m_socketAddres));
-	listen(m_listeningSocket, 5);
-
-	//SOCKET tmp;
-	struct sockaddr_in satmp;
-	int lenc = sizeof(satmp);
-	fd_set socketTests;
-	
-	timeval timeout;
-	timeout.tv_sec = 1;
-	timeout.tv_usec = 0;
-
-	int players = 1;
-
-	while(!m_stopServer && m_state != EGameStates::GS_GAME)
-	{
-		socketTests.fd_count = 1;
-		socketTests.fd_array[0] = m_listeningSocket;
-
-		if(select(1, &socketTests, nullptr, nullptr, &timeout) > 0 && players <= 4)		//used to check if there are connections in queue, we dont want to block thread by accept
-		{
-			CPlayer* player = new CPlayer();
-			player->m_connectedSocket = accept(m_listeningSocket, (sockaddr FAR*)&satmp, &lenc);
-			char* tmp = new char[80];
-			if(recv(player->m_connectedSocket, tmp, 80, 0) > 0)
-			{
-				player->setName(tmp);
-
-				player->m_font = font;
-				player->m_text.setPosition(sf::Vector2f((float)10,(float)10+(players*50)));
-				player->m_text.setString(player->getName());
-				player->m_text.setCharacterSize(20);
-				player->m_text.setColor(sf::Color::Red);
-				player->m_text.setFont(player->m_font);
-				player->m_text.setStyle(sf::Text::Regular);
-
-				player->m_thread = new sf::Thread(&CPlayer::receivePackets, player);
-
-				m_players.push_back(player);
-			}
-			//send(tmp, "LOL", 4, 0);
-			//std::cout << "wyslalem" << std::endl;
-			//closesocket(tmp);
-		}
-	}
-	while(!m_stopServer && m_state == EGameStates::GS_GAME)
-	{
-		//when game is in progress
-	}
-	closesocket(m_listeningSocket);
+	//bind(m_listeningSocket, (sockaddr FAR*)&m_socketAddres, sizeof(m_socketAddres));
+	//listen(m_listeningSocket, 5);
 }
 
 void CGame::startServer()
@@ -186,12 +157,54 @@ void CGame::stopServer()
 void CGame::listenerThread()
 {
 	char buf[80];
+	char buf2[80];
+	char key[4];
+	key[3] = '\0';
 
 	while(m_joined)
 	{
 		if(recv(m_joinSocket, buf, 80, 0) > 0)
 		{
+			memcpy(key, buf, 3);
+			if(strcmp(key, "STR") == 0)
+			{
+				memcpy(buf2, &buf[3], strlen(buf)-3);
+				m_gameField->m_myPlayer = atoi(buf2);
+				setGameState(EGameStates::GS_GAME);
+			}
+			if(strcmp(key, "PLR") == 0)
+			{
+				int id, x, y;
+				for(int i = 0; i < 4; ++i)
+				{
+					memcpy(buf2, &buf[4+(i*7+0)], 2);
+					buf2[2] = '\0';
+					id = atoi(buf2);
+					memcpy(buf2, &buf[4+(i*7+2)], 2);
+					buf2[2] = '\0';
+					x = atoi(buf2);
+					memcpy(buf2, &buf[4+(i*7+4)], 2);
+					buf2[2] = '\0';
+					y = atoi(buf2);
+					m_gameField->addPlayer(id, x, y);
+				}
+			}
+			if(strcmp(key, "MOV") == 0)
+			{
+				int id, x, y;
+				memcpy(buf2, &buf[3], 2);
+				buf2[2] = '\0';
+				id = atoi(buf2);
+				memcpy(buf2, &buf[5], 2);
+				buf2[2] = '\0';
+				x = atoi(buf2);
+				memcpy(buf2, &buf[7], 2);
+				buf2[2] = '\0';
+				y = atoi(buf2);
+				m_gameField->playerMove(x, y, id);
+			}
 		}
+		std::cout << "lol" << std::endl;
 	}
 }
 
@@ -217,24 +230,30 @@ void CGame::connectToServer()
 		}
 		else
 		{
+			m_joined = true;
 			m_listeningThread = new sf::Thread(&CGame::listenerThread, this);
 			m_listeningThread->launch();
 			std::string tmp = "NME"+name.toAnsiString();
 			send(m_joinSocket, tmp.c_str(), tmp.length()+1, 0);	//TODO!
 			setGameState(EGameStates::GS_JOINED);
-			m_joined = true;
 		}
 	}
 	//else
-	{
-		MessageBox(NULL, L"Podany adres ip jest nieprawid³owy, lub nie wpisano poprawnego nicku", L"B³¹d", MB_OK);
-	}
+	//{
+	//	MessageBox(NULL, L"Podany adres ip jest nieprawid³owy, lub nie wpisano poprawnego nicku", L"B³¹d", MB_OK);
+	//}
 }
 
 void CGame::disconnect()
 {
-	send(m_joinSocket, "DISCONNECT", 11, 0);
+	send(m_joinSocket, "DSC", 4, 0);
+	m_joined = false;
 	closesocket(m_joinSocket);
+}
+
+void CGame::rdy()
+{
+	send(m_joinSocket, "RDY", 4, 0);
 }
 
 CGame::CGame(void)

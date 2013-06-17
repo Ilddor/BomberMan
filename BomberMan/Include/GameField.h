@@ -3,6 +3,7 @@
 #include "GameObject.h"
 #include "PlayerObject.h"
 #include <list>
+#include <map>
 class CGameField :
 	public CControl
 {
@@ -14,16 +15,23 @@ private:
 	sf::Vector2f m_position;
 	sf::Vector2f m_size;
 	sf::Vector2f m_startPos;
-	CPlayerObject* temporaryHandleForPlayerObject;
+	//CPlayerObject* temporaryHandleForPlayerObject;
+
+	std::map<int, CPlayerObject*> m_players;
 
 	void generateMap();
 public:
+	int m_myPlayer;
 	//Inherited foos
 	bool mousePressed(sf::Event::MouseButtonEvent& mouse);
 	void KeyPressed(sf::Event::KeyEvent& keyboard);
 	void draw(sf::RenderWindow* window);
 	bool isObjectAtPos(const sf::Vector2f& pos);
 	void ticker(const sf::Clock& clock);
+
+	void bomb(int x, int y);
+	void playerMove(int x, int y, int playerID);
+	void addPlayer(int id, int x, int y);
 	CGameField(EGameStates state);
 	~CGameField(void);
 };

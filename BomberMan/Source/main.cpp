@@ -13,9 +13,9 @@ int main()
 	CGame game;
 	game.setWindowPointer(&Window);
 
-	game.addControl("createGame(MENU)", new CButton(EGameStates::GS_MENU,"Resources/create.png", sf::Vector2f(243,50), [&](){
-		game.setGameState(EGameStates::GS_CREATE);
-	}));
+	//game.addControl("createGame(MENU)", new CButton(EGameStates::GS_MENU,"Resources/create.png", sf::Vector2f(243,50), [&](){
+	//	game.setGameState(EGameStates::GS_CREATE);
+	//}));
 	game.addControl("joinGame(MENU)", new CButton(EGameStates::GS_MENU,"Resources/join.png", sf::Vector2f(230,100), [&](){
 		game.setGameState(EGameStates::GS_JOIN);
 	}));
@@ -34,11 +34,14 @@ int main()
 	}));
 	game.addControl("back(GAME)", new CButton(EGameStates::GS_GAME,"Resources/back.png", sf::Vector2f(520,550), [&](){
 		game.setGameState(EGameStates::GS_MENU);
-		game.stopServer();
+		game.disconnect();
 	}));
 	game.addControl("back(JOINED)", new CButton(EGameStates::GS_JOINED,"Resources/back.png", sf::Vector2f(520,550), [&](){
 		game.setGameState(EGameStates::GS_MENU);
 		game.disconnect();
+	}));
+	game.addControl("rdy(JOINED)", new CButton(EGameStates::GS_JOINED,"Resources/rdy.png", sf::Vector2f(220,550), [&](){
+		game.rdy();
 	}));
 	game.addControl("ip(JOIN)", new CTextField(EGameStates::GS_JOIN, sf::Vector2f(180,550)));
 	game.addControl("name(CREATE)", new CTextField(EGameStates::GS_CREATE, sf::Vector2f(10,450)));

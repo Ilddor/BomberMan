@@ -58,6 +58,11 @@ void CServer::clientThread()
 			if(strcmp(key, "DSC") == 0)
 			{
 				client->m_connected = false;
+				sprintf(msg, "DSC%02d%s", client->m_id, buf2);
+				m_mutexBroadcaster.lock();
+				m_broadcastQueue.push(msg);
+				m_mutexBroadcaster.unlock();
+				m_clients.remove(client);
 			}
 			if(strcmp(key, "MOV") == 0)
 			{
@@ -119,19 +124,34 @@ void CServer::server()
 		for(auto it: m_clients)
 		{
 			if(!it->m_ready)
+			{
+				rdy = false;
 				break;
+			}
 		}
-		if(rdy && m_clients.size() == 4)
+		if(rdy && m_clients.size() >= 1)		//TODO change it to proper value
 		{
 			m_game = true;
 			Sleep(1000);
 			int i = 0;
+			char plr[80] = {'\0'};
+			sprintf(plr, "PLR ");
 			for(auto it: m_clients)
 			{
+				if(i == 0)
+					sprintf(&plr[4+i*7], "%02d%02d%02d ", i, 1, 1);
+				if(i == 1)
+					sprintf(&plr[4+i*7], "%02d%02d%02d ", i, 30, 1);
 				it->m_id = i++;
-				send(it->m_socket, "STR", 4, 0);
+				char msg[10] = {'\0'};
+				sprintf(msg, "STR%02d", it->m_id);
+				send(it->m_socket, msg, 6, 0);
 			}
 			std::cout << "Game started" << std::endl;
+			for(auto it: m_clients)
+			{
+				send(it->m_socket, plr, 80, 0);
+			}
 		}
 		Sleep(1000);
 	}
