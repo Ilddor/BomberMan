@@ -203,7 +203,7 @@ void CPlayerObject::loadTextures(int id)
 
 CPlayerObject::CPlayerObject(int id, sf::Vector2f* fieldPos, sf::Vector2f* startPos, std::list<CGameObject*>* objects)
 {
-	m_isLethal = true;
+	m_isLethal = false;
 	m_destroyed = false;
 	m_direction = EDirections::D_SOUTH;
 	m_objects = objects;
