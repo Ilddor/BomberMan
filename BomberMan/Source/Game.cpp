@@ -165,6 +165,7 @@ void CGame::listenerThread()
 	{
 		if(recv(m_joinSocket, buf, 80, 0) > 0)
 		{
+			std::cout << buf << std::endl;
 			memcpy(key, buf, 3);
 			if(strcmp(key, "STR") == 0)
 			{

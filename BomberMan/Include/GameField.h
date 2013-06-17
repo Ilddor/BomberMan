@@ -32,6 +32,7 @@ public:
 	void bomb(int x, int y);
 	void playerMove(int x, int y, int playerID);
 	void addPlayer(int id, int x, int y);
+	void setPlayerPos(int x, int y, int playerID);
 	CGameField(EGameStates state);
 	~CGameField(void);
 };

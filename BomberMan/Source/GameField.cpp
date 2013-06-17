@@ -117,6 +117,10 @@ void CGameField::playerMove(int x, int y, int playerID)
 	m_players.find(playerID)->second->move(sf::Vector2f(x,y));
 }
 
+void CGameField::setPlayerPos(int x, int y, int playerID)
+{
+}
+
 void CGameField::addPlayer(int id, int x, int y)
 {
 	sf::Vector2f pos(x, y);
