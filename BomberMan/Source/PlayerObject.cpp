@@ -114,7 +114,7 @@ void CPlayerObject::move(int x, int y)
 		moveVector.y = -1;
 	else if(goalPos.y > m_position.y)
 		moveVector.y = 1;
-	if(!isObjectAtPos(m_goalPosition + moveVector)){
+	if(!isObjectAtPos(m_position + moveVector)){
 		
 		if(moveVector.x < 0)
 			m_direction = EDirections::D_WEST;
@@ -126,7 +126,7 @@ void CPlayerObject::move(int x, int y)
 			m_direction = EDirections::D_SOUTH;
 		//m_position += moveVector;
 		//m_sprite.setPosition(sf::Vector2f(m_fieldPos->x + 16*m_position.x, m_fieldPos->y + 16*m_position.y - 8));
-		m_goalPosition = m_goalPosition + moveVector;
+		m_goalPosition = m_position + moveVector;
 	}
 	if(actualDirection != m_direction)
 		m_animationState = 1;	
@@ -136,7 +136,7 @@ void CPlayerObject::move(sf::Vector2f moveVector)
 {
 	EDirections actualDirection = m_direction;
 	if(m_goalPosition == m_position){
-		if(!isObjectAtPos(m_goalPosition + moveVector))
+		if(!isObjectAtPos(m_position + moveVector))
 		{
 			if(moveVector.x < 0)
 			{
