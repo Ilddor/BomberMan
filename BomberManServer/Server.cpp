@@ -149,11 +149,11 @@ void CServer::server()
 				if(i == 0)
 					sprintf(&plr[4+i*7], "%02d%02d%02d ", i, 1, 1);
 				if(i == 1)
-					sprintf(&plr[4+i*7], "%02d%02d%02d ", i, 30, 1);
+					sprintf(&plr[4+i*7], "%02d%02d%02d ", i, 31, 1);
 				if(i == 2)
-					sprintf(&plr[4+i*7], "%02d%02d%02d ", i, 1, 33);
+					sprintf(&plr[4+i*7], "%02d%02d%02d ", i, 1, 31);
 				if(i == 3)
-					sprintf(&plr[4+i*7], "%02d%02d%02d ", i, 30, 33);
+					sprintf(&plr[4+i*7], "%02d%02d%02d ", i, 31, 31);
 				it->m_id = i++;
 				char msg[10] = {'\0'};
 				sprintf(msg, "STR%02d%02d", it->m_id, m_clients.size());
