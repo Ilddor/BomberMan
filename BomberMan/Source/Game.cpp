@@ -85,8 +85,10 @@ void CGame::ticker(const sf::Clock& clock)
 			}*/
 			if(tmp)
 			{
+				m_queueMutex.lock();
 				send(m_joinSocket, msg2, 10, 0);
 				send(m_joinSocket, msg, 10, 0);
+				m_queueMutex.unlock();
 			}
 		}
 	}
@@ -135,7 +137,9 @@ void CGame::handleEvent(sf::Event& ev)
 				{
 					sprintf(msg, "BMB%02d%02d", (int)m_gameField->getPlayerPos().x, (int)m_gameField->getPlayerPos().y);
 					//send(m_joinSocket, msg2, 10, 0);
+					m_queueMutex.lock();
 					send(m_joinSocket, msg, 10, 0);
+					m_queueMutex.unlock();
 				}
 			}
 			/*for(auto& it: m_controls)		//you don't need to put this loop here cuz for gamefield instruction above would send key events when it has focus(imean when you click on it.
@@ -214,12 +218,12 @@ void CGame::listenerThread()
 
 	while(m_joined)
 	{
+		m_queueMutex.lock();
 		if(recv(m_joinSocket, buf, 80, 0) > 0)
 		{
 			std::cout << buf << std::endl;
-			//m_queueMutex.lock();
-			//m_listQueue.push(buf);
-			//m_queueMutex.unlock();
+			m_listQueue.push(buf);
+			m_queueMutex.unlock();
 			memcpy(key, buf, 3);
 			if(strcmp(key, "STR") == 0)
 			{
@@ -283,6 +287,10 @@ void CGame::listenerThread()
 				y = atoi(buf2);
 				m_gameField->bomb(x, y);
 			}
+		}
+		else
+		{
+			m_queueMutex.unlock();
 		}
 		//std::cout << "lol" << std::endl;
 	}
