@@ -1,12 +1,13 @@
 #include "Bomb.h"
 #include "Explosion.h"
+#include "TextureBase.h"
 
 void CBomb::animate()
 {
 	if(m_animationState < 2)
 	{
 		m_animationState++;
-		m_sprite.setTexture(m_textures[m_animationState]);
+		m_sprite.setTexture(m_textureBase->m_textures[0][m_animationState]);
 	}
 	else
 	{
@@ -76,16 +77,14 @@ void CBomb::ticker(const sf::Clock& clock)
 	m_lastTick = clock.getElapsedTime();
 }
 
-CBomb::CBomb(sf::Vector2f* fieldPos, sf::Vector2f position, std::list<CGameObject*>* objects)
+CBomb::CBomb(sf::Vector2f* fieldPos, sf::Vector2f position, std::list<CGameObject*>* objects, CTextureBase* texturebase)
 {
 	m_destroyed = false;
 	m_objects = objects;
-	m_textures[0].loadFromFile("Resources/Game/Bombs/bomb_0.png");
-	m_textures[1].loadFromFile("Resources/Game/Bombs/bomb_1.png");
-	m_textures[2].loadFromFile("Resources/Game/Bombs/bomb_2.png");
+	m_textureBase = texturebase;
 	m_position = position;
 	m_fieldPos = fieldPos;
-	m_sprite.setTexture(m_textures[0]);
+	m_sprite.setTexture(m_textureBase->m_textures[0][0]);
 	m_sprite.setPosition(sf::Vector2f(fieldPos->x + 16*position.x, fieldPos->y + 16*position.y));
 	m_animationState = 0;
 	m_lastTick = sf::Clock().getElapsedTime();

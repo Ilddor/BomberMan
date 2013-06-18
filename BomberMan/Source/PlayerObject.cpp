@@ -5,7 +5,7 @@
 
 void CPlayerObject::KeyPressed(sf::Event::KeyEvent& keyboard)
 {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+	/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 		move(sf::Vector2f(0.0,-1.0));
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 		move(sf::Vector2f(0.0,1.0));
@@ -14,7 +14,7 @@ void CPlayerObject::KeyPressed(sf::Event::KeyEvent& keyboard)
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 		move(sf::Vector2f(1.0,0.0));
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-		m_objects->push_back(new CBomb(m_fieldPos, m_position, m_objects));	
+		m_objects->push_back(new CBomb(m_fieldPos, m_position, m_objects, &m_textureBase));*/	
 }
 
 void CPlayerObject::ticker(const sf::Clock& clock)

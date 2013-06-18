@@ -109,7 +109,7 @@ void CGameField::draw(sf::RenderWindow* window)
 
 void CGameField::bomb(int x, int y)
 {
-	m_objects.push_back(new CBomb(&m_position, sf::Vector2f(x,y), &m_objects));
+	m_objects.push_back(new CBomb(&m_position, sf::Vector2f(x,y), &m_objects, &m_textureBase));
 }
 
 void CGameField::playerMove(int x, int y, int playerID)

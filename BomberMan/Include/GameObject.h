@@ -3,6 +3,7 @@
 #include <list>
 #include <iostream>
 #include "Misc.h"
+#include "TextureBase.h"
 class CGameObject
 {
 protected:
@@ -12,6 +13,7 @@ protected:
 	std::list<CGameObject*>* m_objects;
 	bool m_destroyed;
 	bool m_isLethal;
+	CTextureBase* m_textureBase;
 public:
 	bool isDestroyed() { return m_destroyed; }
 	bool isObjectAtPos(const sf::Vector2f& pos)

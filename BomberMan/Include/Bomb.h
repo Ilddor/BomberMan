@@ -16,7 +16,7 @@ class CBomb :
 		void draw(sf::RenderWindow* window);
 		bool destroy();
 		void ticker(const sf::Clock& clock);
-		CBomb(sf::Vector2f* fieldPos, sf::Vector2f position, std::list<CGameObject*>* objects);
+		CBomb(sf::Vector2f* fieldPos, sf::Vector2f position, std::list<CGameObject*>* objects, CTextureBase* texturebase);
 		~CBomb(void);
 	};
 

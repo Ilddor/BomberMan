@@ -4,6 +4,7 @@
 #include "PlayerObject.h"
 #include <list>
 #include <map>
+#include "TextureBase.h"
 class CGameField :
 	public CControl
 {
@@ -15,6 +16,7 @@ private:
 	sf::Vector2f m_position;
 	sf::Vector2f m_size;
 	sf::Vector2f m_startPos;
+	CTextureBase m_textureBase;
 	//CPlayerObject* temporaryHandleForPlayerObject;
 
 	std::map<int, CPlayerObject*> m_players;
