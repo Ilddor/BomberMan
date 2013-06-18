@@ -48,7 +48,7 @@ void CGame::ticker(const sf::Clock& clock)
 		it.second->ticker(clock);
 	if(m_state == EGameStates::GS_GAME)
 	{
-		if(!m_gameField->isPlayerMoving() && (clock.getElapsedTime() - m_lastSend).asMilliseconds() > 50)
+		/*if(!m_gameField->isPlayerMoving() && (clock.getElapsedTime() - m_lastSend).asMilliseconds() > 50)
 		{
 			bool tmp = false;
 			char msg[10] = {'\0'};
@@ -78,11 +78,6 @@ void CGame::ticker(const sf::Clock& clock)
 				sprintf(msg, "MOV%02d%02d", 1, 0);
 				tmp = true;
 			}
-			/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-			{
-				sprintf(msg, "BMB%02d%02d", (int)m_gameField->getPlayerPos().x, (int)m_gameField->getPlayerPos().y);
-				tmp = true;
-			}*/
 			if(tmp)
 			{
 				//m_queueMutex.lock();
@@ -91,7 +86,7 @@ void CGame::ticker(const sf::Clock& clock)
 				//m_queueMutex.unlock();
 				m_lastSend = clock.getElapsedTime();
 			}
-		}
+		}*/
 	}
 }
 
@@ -120,20 +115,50 @@ void CGame::handleEvent(sf::Event& ev)
 			if(m_state == EGameStates::GS_GAME)
 			{
 				char msg[10] = {'\0'};
-				//char msg2[10] = {'\0'};
-				/*sprintf(msg2, "POS%02d%02d", (int)m_gameField->getPlayerPos().x,  (int)m_gameField->getPlayerPos().y);
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-					//playerMove(0, -1, m_myPlayer);
-					sprintf(msg, "MOV%02d%02d", 0, -1);
-				else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-					//playerMove(0, 1, m_myPlayer);
-					sprintf(msg, "MOV%02d%02d", 0, 1);
-				else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-					//playerMove(-1, 0, m_myPlayer);
-					sprintf(msg, "MOV%02d%02d", -1, 0);
-				else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-					//playerMove(1, 0, m_myPlayer);
-					sprintf(msg, "MOV%02d%02d", 1, 0);*/
+				if(!m_gameField->isPlayerMoving())
+				{
+					bool tmp = false;
+					char msg[10] = {'\0'};
+					char msg2[10] = {'\0'};
+					sprintf(msg2, "POS%02d%02d", (int)m_gameField->getPlayerPos().x,  (int)m_gameField->getPlayerPos().y);
+					if (ev.key.code == sf::Keyboard::Up)
+					{
+						//playerMove(0, -1, m_myPlayer);
+						sprintf(msg, "MOV%02d%02d", 0, -1);
+						tmp = true;
+					}
+					else if (ev.key.code == sf::Keyboard::Down)
+					{
+						//playerMove(0, 1, m_myPlayer);
+						sprintf(msg, "MOV%02d%02d", 0, 1);
+						tmp = true;
+					}
+					else if (ev.key.code == sf::Keyboard::Left)
+					{
+						//playerMove(-1, 0, m_myPlayer);
+						sprintf(msg, "MOV%02d%02d", -1, 0);
+						tmp = true;
+					}
+					else if (ev.key.code == sf::Keyboard::Right)
+					{
+						//playerMove(1, 0, m_myPlayer);
+						sprintf(msg, "MOV%02d%02d", 1, 0);
+						tmp = true;
+					}
+					/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+					{
+						sprintf(msg, "BMB%02d%02d", (int)m_gameField->getPlayerPos().x, (int)m_gameField->getPlayerPos().y);
+						tmp = true;
+					}*/
+					if(tmp)
+					{
+						//m_queueMutex.lock();
+						send(m_joinSocket, msg2, 10, 0);
+						send(m_joinSocket, msg, 10, 0);
+						//m_queueMutex.unlock();
+						//m_lastSend = clock.getElapsedTime();
+					}
+				}
 				if (ev.key.code == sf::Keyboard::Space && !m_gameField->isPlayerDead())
 				{
 					sprintf(msg, "BMB%02d%02d", (int)m_gameField->getPlayerPos().x, (int)m_gameField->getPlayerPos().y);
