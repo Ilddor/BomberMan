@@ -17,6 +17,11 @@ void CPlayerObject::KeyPressed(sf::Event::KeyEvent& keyboard)
 		m_objects->push_back(new CBomb(m_fieldPos, m_position, m_objects, &m_textureBase));*/	
 }
 
+bool CPlayerObject::isDead()
+{
+	return m_direction == EDirections::D_DEATH;
+}
+
 void CPlayerObject::ticker(const sf::Clock& clock)
 {
 	if(m_goalPosition != m_position)

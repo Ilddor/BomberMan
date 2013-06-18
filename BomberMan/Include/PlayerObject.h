@@ -24,6 +24,7 @@ class CPlayerObject :
 		void ticker(const sf::Clock& clock);
 		void setPos(sf::Vector2f pos);
 		bool isMoving();
+		bool isDead();
 		CPlayerObject(int id, sf::Vector2f* fieldPos, sf::Vector2f* startPos, std::list<CGameObject*>* objects, CTextureBase* texturebase);
 		~CPlayerObject(void);
 	};
