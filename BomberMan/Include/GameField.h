@@ -37,6 +37,7 @@ public:
 	void setPlayerPos(int x, int y, int playerID);
 	sf::Vector2f getPlayerPos();
 	bool isPlayerMoving();
+	bool isPlayerDead();
 	CGameField(EGameStates state);
 	~CGameField(void);
 };

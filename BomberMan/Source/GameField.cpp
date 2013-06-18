@@ -143,6 +143,11 @@ bool CGameField::isPlayerMoving()
 		return true;
 }
 
+bool CGameField::isPlayerDead()
+{
+	return m_players.find(m_myPlayer)->second->isDead();
+}
+
 CGameField::CGameField(EGameStates state): CControl(state)
 {
 	m_position.x = 20;
