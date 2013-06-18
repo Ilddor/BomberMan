@@ -152,8 +152,8 @@ void CServer::server()
 					sprintf(&plr[4+i*7], "%02d%02d%02d ", i, 30, 1);
 				it->m_id = i++;
 				char msg[10] = {'\0'};
-				sprintf(msg, "STR%02d", it->m_id);
-				send(it->m_socket, msg, 6, 0);
+				sprintf(msg, "STR%02d%02d", it->m_id, m_clients.size());
+				send(it->m_socket, msg, 8, 0);
 			}
 			std::cout << "Game started" << std::endl;
 			Sleep(100);

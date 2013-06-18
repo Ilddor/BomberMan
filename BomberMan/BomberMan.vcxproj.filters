@@ -54,7 +54,7 @@
     <ClInclude Include="Include\BreakableBlock.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TextureBase.h">
+    <ClInclude Include="Include\TextureBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -92,7 +92,7 @@
     <ClCompile Include="Source\BreakableBlock.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TextureBase.cpp">
+    <ClCompile Include="Source\TextureBase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

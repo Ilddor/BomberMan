@@ -23,8 +23,8 @@
     <ClInclude Include="Include\Player.h" />
     <ClInclude Include="Include\PlayerObject.h" />
     <ClInclude Include="Include\TextField.h" />
+    <ClInclude Include="Include\TextureBase.h" />
     <ClInclude Include="Include\UnbreakableBlock.h" />
-    <ClInclude Include="TextureBase.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Bomb.cpp" />
@@ -37,8 +37,8 @@
     <ClCompile Include="Source\Player.cpp" />
     <ClCompile Include="Source\PlayerObject.cpp" />
     <ClCompile Include="Source\TextField.cpp" />
+    <ClCompile Include="Source\TextureBase.cpp" />
     <ClCompile Include="Source\UnbreakableBlock.cpp" />
-    <ClCompile Include="TextureBase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
