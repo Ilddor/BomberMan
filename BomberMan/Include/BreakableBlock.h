@@ -7,7 +7,7 @@ class CBreakableBlock :
 		void draw(sf::RenderWindow* window);
 		bool destroy();
 		void ticker(const sf::Clock& clock);
-		CBreakableBlock(int id, const sf::Vector2f& myPos, const sf::Vector2f& fieldPos);
+		CBreakableBlock(int id, const sf::Vector2f& myPos, const sf::Vector2f& fieldPos, CTextureBase* texturebase);
 		~CBreakableBlock(void);
 	};
 

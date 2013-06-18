@@ -42,9 +42,9 @@ void CGameField::generateMap()
 		{
 			sf::Color tmp = map.getPixel(i,j);
 			if(map.getPixel(i,j) == unbreakable)
-				m_objects.push_back(new CUnbreakableBlock(0,sf::Vector2f(i,j),m_position));
+				m_objects.push_back(new CUnbreakableBlock(0,sf::Vector2f(i,j),m_position, &m_textureBase));
 			else if(map.getPixel(i,j) == breakable)
-				m_objects.push_back(new CBreakableBlock(0,sf::Vector2f(i,j),m_position));
+				m_objects.push_back(new CBreakableBlock(0,sf::Vector2f(i,j),m_position, &m_textureBase));
 			else if(map.getPixel(i,j) == startPos)
 				m_startPos = sf::Vector2f(i,j);
 		}
@@ -130,7 +130,7 @@ sf::Vector2f CGameField::getPlayerPos()
 void CGameField::addPlayer(int id, int x, int y)
 {
 	sf::Vector2f pos(x, y);
-	auto tmp = new CPlayerObject(1, &m_position, &pos, &m_objects);
+	auto tmp = new CPlayerObject(1, &m_position, &pos, &m_objects, &m_textureBase);
 	m_objects.push_back(tmp);
 	m_players.insert(std::make_pair(id, tmp));
 }

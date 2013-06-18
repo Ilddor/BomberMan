@@ -22,6 +22,8 @@ void CPlayerObject::ticker(const sf::Clock& clock)
 	if(m_goalPosition != m_position)
 	{
 		float movement = (96.f * (float)(clock.getElapsedTime()	- m_lastTick).asSeconds())/16.f;
+		if(isObjectLethal(m_goalPosition))
+			destroy();
 		if(m_direction == EDirections::D_NORTH)
 		{
 			if(m_position.y - movement <= m_goalPosition.y)
@@ -90,7 +92,7 @@ void CPlayerObject::animate()
 		}
 	}
 	if(m_direction == EDirections::D_DEATH)
-		m_sprite.setTexture(m_textures[12 + m_animationState]);		
+		m_sprite.setTexture(m_textureBase->m_textures[3][12 + m_animationState]);		
 }
 
 void CPlayerObject::move(int x, int y)
@@ -134,22 +136,22 @@ void CPlayerObject::move(sf::Vector2f moveVector)
 			if(moveVector.x < 0)
 			{
 				m_direction = EDirections::D_WEST;
-				m_sprite.setTexture(m_textures[3 + m_animationState]);
+				m_sprite.setTexture(m_textureBase->m_textures[3][3 + m_animationState]);
 			}
 			else if(moveVector.x > 0)
 			{
 				m_direction = EDirections::D_EAST;
-				m_sprite.setTexture(m_textures[6 + m_animationState]);
+				m_sprite.setTexture(m_textureBase->m_textures[3][6 + m_animationState]);
 			}
 			else if(moveVector.y < 0)
 			{
 				m_direction = EDirections::D_NORTH;
-				m_sprite.setTexture(m_textures[9 + m_animationState]);
+				m_sprite.setTexture(m_textureBase->m_textures[3][9 + m_animationState]);
 			}
 			else if(moveVector.y > 0)
 			{
 				m_direction = EDirections::D_SOUTH;
-				m_sprite.setTexture(m_textures[0 + m_animationState]);
+				m_sprite.setTexture(m_textureBase->m_textures[3][0 + m_animationState]);
 			}
 			m_goalPosition = m_goalPosition + moveVector;
 		}
@@ -176,30 +178,6 @@ bool CPlayerObject::destroy()
 	m_animationMultiplier = 1;
 	return true;
 }
-void CPlayerObject::loadTextures(int id)
-{
-	std::string path = "Resources/Game/Players/player";
-	path += id + '0';
-	std::string states[4] = {"down","left","right","up"};
-	int counter = 1;
-	int state = 0;
-	for(int i = 0; i < 12; i++){
-		m_textures[i].loadFromFile(path + "_" + states[state] + "_" + (char)(counter + '0') + ".png");
-		counter++;
-		if(counter > 3){
-			counter = 1;
-			state++;
-		}
-	}
-	for(int i = 0; i < 4; i++){
-		m_textures[12 + i].loadFromFile(path + "_death_" + (char)(i+'1') + ".png");
-		counter++;
-		if(counter > 3){
-			counter = 0;
-			state++;
-		}
-	}
-}
 
 void CPlayerObject::setPos(sf::Vector2f pos)
 {
@@ -211,19 +189,19 @@ bool CPlayerObject::isMoving()
 	return m_position != m_goalPosition;
 }
 
-CPlayerObject::CPlayerObject(int id, sf::Vector2f* fieldPos, sf::Vector2f* startPos, std::list<CGameObject*>* objects)
+CPlayerObject::CPlayerObject(int id, sf::Vector2f* fieldPos, sf::Vector2f* startPos, std::list<CGameObject*>* objects, CTextureBase* texturebase)
 {
 	m_isLethal = false;
 	m_destroyed = false;
+	m_textureBase = texturebase;
 	m_direction = EDirections::D_SOUTH;
 	m_objects = objects;
 	m_fieldPos = fieldPos;
 	m_startPos = startPos;
 	m_position = *m_startPos;
-	loadTextures(id);
 	m_animationState = 1;
 	m_animationMultiplier = 1;
-	m_sprite.setTexture(m_textures[1]);
+	m_sprite.setTexture(m_textureBase->m_textures[3][1]);
 	m_sprite.setPosition(sf::Vector2f(fieldPos->x + 16*startPos->x, fieldPos->y + 16*startPos->y - 8));
 	m_goalPosition = m_position;
 	m_lastTick = sf::Clock().getElapsedTime();

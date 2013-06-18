@@ -19,42 +19,43 @@ void CBomb::animate()
 void CBomb::explode()
 {
 	//CExplosion(int id, sf::Vector2f* fieldPos, sf::Vector2f position, std::list<CGameObject*>* objects)
-	m_objects->push_back(new CExplosion(0, m_fieldPos, m_position, m_objects));
+	EDestroyResult boomEffect = destroyObjectAt(m_position);
+	m_objects->push_back(new CExplosion(0, m_fieldPos, m_position, m_objects, m_textureBase));
 	//UP
-	EDestroyResult boomEffect = destroyObjectAt(sf::Vector2f(m_position.x, m_position.y-1));
+	boomEffect = destroyObjectAt(sf::Vector2f(m_position.x, m_position.y-1));
 	if(boomEffect != EDestroyResult::DR_FAIL)
 	{
-		m_objects->push_back(new CExplosion(1, m_fieldPos, m_position, m_objects));
+		m_objects->push_back(new CExplosion(1, m_fieldPos, m_position, m_objects, m_textureBase));
 		if(boomEffect == EDestroyResult::DR_NONE)
 			if(destroyObjectAt(sf::Vector2f(m_position.x, m_position.y-2)) != EDestroyResult::DR_FAIL)
-				m_objects->push_back(new CExplosion(5, m_fieldPos, m_position, m_objects));
+				m_objects->push_back(new CExplosion(5, m_fieldPos, m_position, m_objects, m_textureBase));
 	}
 	//Down
 	boomEffect = destroyObjectAt(sf::Vector2f(m_position.x, m_position.y+1));
 	if(boomEffect != EDestroyResult::DR_FAIL)
 	{
-		m_objects->push_back(new CExplosion(2, m_fieldPos, m_position, m_objects));
+		m_objects->push_back(new CExplosion(2, m_fieldPos, m_position, m_objects, m_textureBase));
 		if(boomEffect == EDestroyResult::DR_NONE)
 			if(destroyObjectAt(sf::Vector2f(m_position.x, m_position.y+2)) != EDestroyResult::DR_FAIL)
-				m_objects->push_back(new CExplosion(6, m_fieldPos, m_position, m_objects));
+				m_objects->push_back(new CExplosion(6, m_fieldPos, m_position, m_objects, m_textureBase));
 	}
 	//Left
 	boomEffect = destroyObjectAt(sf::Vector2f(m_position.x-1, m_position.y));
 	if(boomEffect != EDestroyResult::DR_FAIL)
 	{
-		m_objects->push_back(new CExplosion(3, m_fieldPos, m_position, m_objects));
+		m_objects->push_back(new CExplosion(3, m_fieldPos, m_position, m_objects, m_textureBase));
 		if(boomEffect == EDestroyResult::DR_NONE)
 			if(destroyObjectAt(sf::Vector2f(m_position.x-2, m_position.y)) != EDestroyResult::DR_FAIL)
-				m_objects->push_back(new CExplosion(7, m_fieldPos, m_position, m_objects));
+				m_objects->push_back(new CExplosion(7, m_fieldPos, m_position, m_objects, m_textureBase));
 	}
 	//Right
 	boomEffect = destroyObjectAt(sf::Vector2f(m_position.x+1, m_position.y));
 	if(boomEffect != EDestroyResult::DR_FAIL)
 	{
-		m_objects->push_back(new CExplosion(4, m_fieldPos, m_position, m_objects));
+		m_objects->push_back(new CExplosion(4, m_fieldPos, m_position, m_objects, m_textureBase));
 		if(boomEffect == EDestroyResult::DR_NONE)
 			if(destroyObjectAt(sf::Vector2f(m_position.x+2, m_position.y)) != EDestroyResult::DR_FAIL)
-				m_objects->push_back(new CExplosion(8, m_fieldPos, m_position, m_objects));
+				m_objects->push_back(new CExplosion(8, m_fieldPos, m_position, m_objects, m_textureBase));
 		
 	} 	
 }
