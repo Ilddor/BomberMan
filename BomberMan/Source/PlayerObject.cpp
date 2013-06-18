@@ -206,6 +206,11 @@ void CPlayerObject::setPos(sf::Vector2f pos)
 	m_position = pos;
 }
 
+bool CPlayerObject::isMoving()
+{
+	return m_position != m_goalPosition;
+}
+
 CPlayerObject::CPlayerObject(int id, sf::Vector2f* fieldPos, sf::Vector2f* startPos, std::list<CGameObject*>* objects)
 {
 	m_isLethal = false;

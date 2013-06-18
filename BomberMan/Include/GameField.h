@@ -34,6 +34,7 @@ public:
 	void addPlayer(int id, int x, int y);
 	void setPlayerPos(int x, int y, int playerID);
 	sf::Vector2f getPlayerPos();
+	bool isPlayerMoving();
 	CGameField(EGameStates state);
 	~CGameField(void);
 };

@@ -135,6 +135,14 @@ void CGameField::addPlayer(int id, int x, int y)
 	m_players.insert(std::make_pair(id, tmp));
 }
 
+bool CGameField::isPlayerMoving()
+{
+	if(!m_players.empty())
+		return m_players.find(m_myPlayer)->second->isMoving();
+	else
+		return true;
+}
+
 CGameField::CGameField(EGameStates state): CControl(state)
 {
 	m_position.x = 20;
