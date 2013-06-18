@@ -33,9 +33,9 @@ void CGameField::generateMap()
 	map.loadFromFile("Resources/map.bmp");
 	m_size.x = map.getSize().x;
 	m_size.y = map.getSize().y;
-	sf::Color unbreakable(0,0,0,0);
-	sf::Color breakable(255,0,0,0);
-	sf::Color startPos(0,0,255,0);
+	sf::Color unbreakable(0,0,0,255);
+	sf::Color breakable(255,0,0,255);
+	sf::Color startPos(0,0,255,255);
 	for(int i = 0; i < map.getSize().x; i++)
 	{
 		for(int j = 0; j < map.getSize().y; j++)
