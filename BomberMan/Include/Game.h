@@ -38,6 +38,7 @@ private:
 	std::vector<CPlayer*> m_players;
 	CGameField* m_gameField;
 	int m_playersCount;
+	sf::Time m_lastSend;
 public:
 	void setWindowPointer(sf::RenderWindow* ptr);
 	void setGameState(EGameStates state);

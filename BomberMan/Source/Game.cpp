@@ -48,7 +48,7 @@ void CGame::ticker(const sf::Clock& clock)
 		it.second->ticker(clock);
 	if(m_state == EGameStates::GS_GAME)
 	{
-		if(!m_gameField->isPlayerMoving())
+		if(!m_gameField->isPlayerMoving() && (clock.getElapsedTime() - m_lastSend).asMilliseconds() > 150)
 		{
 			bool tmp = false;
 			char msg[10] = {'\0'};
@@ -89,6 +89,7 @@ void CGame::ticker(const sf::Clock& clock)
 				send(m_joinSocket, msg2, 10, 0);
 				send(m_joinSocket, msg, 10, 0);
 				//m_queueMutex.unlock();
+				m_lastSend = clock.getElapsedTime();
 			}
 		}
 	}
@@ -133,7 +134,7 @@ void CGame::handleEvent(sf::Event& ev)
 				else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 					//playerMove(1, 0, m_myPlayer);
 					sprintf(msg, "MOV%02d%02d", 1, 0);*/
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+				if (ev.key.code == sf::Keyboard::Space)
 				{
 					sprintf(msg, "BMB%02d%02d", (int)m_gameField->getPlayerPos().x, (int)m_gameField->getPlayerPos().y);
 					//send(m_joinSocket, msg2, 10, 0);
